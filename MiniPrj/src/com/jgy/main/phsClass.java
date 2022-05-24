@@ -3,7 +3,7 @@ package com.jgy.main;
 public class phsClass {
 
 	public static void main(String[] args) {
-		System.out.println("¾È³çÇÏ¼¼¿ä ¤¾¤¾ ¹ÚÇÑ¼ÖÀÔ´Ï´Ù.");
+		System.out.println("ë°•í•œì†” í…ŒìŠ¤íŠ¸ì…ë‹ˆë‹¤!");
 	}
 
 }
