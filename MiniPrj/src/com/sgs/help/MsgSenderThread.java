@@ -12,12 +12,14 @@ public class MsgSenderThread extends Thread {
     private final PrintWriter writer;
     private final Scanner sc = new Scanner(System.in);
     private boolean flag = true;
+    private final User user;
 
 
-    public MsgSenderThread(SocketInfo socketInfo, Socket socket) throws IOException {
+    public MsgSenderThread(SocketInfo socketInfo, Socket socket, User user) throws IOException {
         this.socket = socket;
-       writer = new PrintWriter(socket.getOutputStream());
+        writer = new PrintWriter(socket.getOutputStream());
         this.socketInfo = socketInfo;
+        this.user = user;
     }
 
     @Override
@@ -36,7 +38,7 @@ public class MsgSenderThread extends Thread {
 
     private void sendMsg(){
         String inputMsg = sc.nextLine();
-        writer.println("상담자: " + inputMsg);
+        writer.println(user.getNick()+" : "+inputMsg);
         writer.flush();
     }
 

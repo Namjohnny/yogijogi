@@ -9,7 +9,7 @@ public class Help {
 	
 	public Help(User user) throws IOException {
 		this.user = user;
-		if(user.getRank()=="help") new Communication(user).server();
+		if(user.getRank().equals("help")) new Communication(user).server();
 		else showList();
 	}
 	

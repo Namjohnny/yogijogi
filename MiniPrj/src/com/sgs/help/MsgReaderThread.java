@@ -12,10 +12,11 @@ public class MsgReaderThread extends Thread {
     private final BufferedReader reader;
     private boolean flag = true;
 
-    public MsgReaderThread(SocketInfo socketInfo, Socket socket) throws IOException {
+    public MsgReaderThread(SocketInfo socketInfo, Socket socket, User user) throws IOException {
         this.socket = socket;
         reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         this.socketInfo = socketInfo;
+        
     }
 
     @Override

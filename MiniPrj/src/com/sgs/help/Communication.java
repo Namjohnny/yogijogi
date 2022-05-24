@@ -12,14 +12,14 @@ public class Communication {
     	this.user = user;
     }
     
-    public static void client() throws UnknownHostException, IOException {
+    public void client() throws UnknownHostException, IOException {
     	
         Socket socket = new Socket("127.0.0.1", 12345);
 
         SocketInfo socketInfo = new SocketInfo(socket, user);
     }
     
-    public static void server() throws IOException {
+    public void server() throws IOException {
     	
         ServerSocket serverSocket = new ServerSocket(12345);
         

@@ -8,15 +8,16 @@ public class SocketInfo {
     private final Socket socket;
     private final MsgReaderThread reader;
     private final MsgSenderThread sender;
-    private final User user;
+    private User user;
     
     public SocketInfo(Socket socket, User user) throws IOException {
         this.socket = socket;
+        this.user = user;
 
-        reader = new MsgReaderThread(this, socket);
+        reader = new MsgReaderThread(this, socket, user);
         reader.start();
 
-        sender = new MsgSenderThread(this, socket);
+        sender = new MsgSenderThread(this, socket, user);
         sender.start();
     }
 
