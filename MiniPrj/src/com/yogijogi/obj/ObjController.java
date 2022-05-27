@@ -4,14 +4,14 @@ import java.util.Scanner;
 
 public class ObjController {
 	
-	Scanner sc = new Scanner(System.in);
+	 static Scanner sc = new Scanner(System.in);
 	
-	public String scanStr() {
+	public static String scanStr() {
 		String result = sc.nextLine();
 		return result;
 	}
 	
-	public int scanInt() {
+	public static int scanInt() {
 		int result = Integer.parseInt(sc.nextLine());
 		return result;
 	}
