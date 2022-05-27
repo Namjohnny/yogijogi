@@ -1,16 +1,20 @@
 package com.yogijogi.member;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import com.sgs.help.Help;
 import com.yogijogi.obj.ObjController;
 import com.yogijogi.obj.OracleDB;
 
 public class MyPage {
 	
+	
 	public void showPage(User user) {
+		
 		boolean myPageOut = false;
 		
 		while(!myPageOut) {
@@ -21,7 +25,8 @@ public class MyPage {
 			System.out.println("4. 결제 내역");
 			System.out.println("5. 리뷰 확인");
 			System.out.println("6. 회원 탈퇴");
-			System.out.println("7. 나가기");
+			System.out.println("7. 고객 센터");
+			System.out.println("8. 나가기");
 			System.out.print("번호 입력>> ");
 			int pageNum = ObjController.scanInt();
 			
@@ -33,6 +38,7 @@ public class MyPage {
 			case 2:
 				//로그아웃
 				logout();
+				myPageOut = true;
 				break;
 			case 3:
 				//예약 내역 확인
@@ -48,6 +54,13 @@ public class MyPage {
 				memDrop(user.getMemNo());
 				break;
 			case 7:
+				//고객 센터
+				try {
+					new Help(user);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			case 8:
 				//마이페이지에서 나가기
 				myPageOut = true;
 				break;

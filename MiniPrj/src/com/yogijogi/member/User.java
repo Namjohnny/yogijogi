@@ -14,7 +14,7 @@ public class User {
 		this.dropYN = dropYN;
 	}
 	
-	public static int LoginUserNo;
+	public static int LoginUserNo = -1;
 	
 	//필드
 	private int memNo;
