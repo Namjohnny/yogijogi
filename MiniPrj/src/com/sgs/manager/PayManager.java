@@ -35,7 +35,7 @@ public class PayManager {
 	}
 	public void searchPay() {
 		Connection conn = OracleDB.getOracleConnection();
-		String sql = "SELECT * FROM PAYMENT";
+		String sql = "SELECT * FROM PAYMENT WHERE PAY_YN = 'N'";
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		Columns.showPayColumns();
@@ -105,17 +105,17 @@ public class PayManager {
 		
 	}	
 	public void modPay() {
+		System.out.println("===잠시만 기다려주세요===\n");
 		Connection conn = OracleDB.getOracleConnection();
 		String sql = "UPDATE PAYMENT SET ? = ? WHERE PAY_NO = ?";		
 		PreparedStatement pstmt = null;
 		int result = 0;
 		try {
 			pstmt = conn.prepareStatement(sql);
-			
 			System.out.println("수정하실 결제번호를 말씀해주세요");
 			System.out.print("결제번호>> ");
-			int pno = ObjController.scanInt();
-			pstmt.setInt(3, pno);
+			int payno = ObjController.scanInt();
+			pstmt.setInt(3, payno);
 			while(true) {
 				System.out.println("수정하실 사항을 선택해주세요");
 				System.out.println("1.회원번호 | 2.결제내용 | 3.결제금액");
@@ -123,20 +123,20 @@ public class PayManager {
 				if(choice == 1) {
 					System.out.print("회원번호>> ");
 					int memno = ObjController.scanInt();
-					pstmt.setString(1, "MEM_NO");
-					pstmt.setInt(2, memno);
+					pstmt.setString(1,"MEM_NO");
+					pstmt.setInt(2,memno);
 					break;
 				} else if(choice == 2) {
 					System.out.print("결제내용>> ");
 					String paycon = ObjController.scanStr();
-					pstmt.setString(1, "PAYCON");
-					pstmt.setString(2, paycon);
+					pstmt.setString(1,"PAYCON");
+					pstmt.setString(2,"'"+paycon+"'");
 					break;
 				} else if(choice == 3) {
 					System.out.print("결제금액>> ");
 					int amount = ObjController.scanInt();
-					pstmt.setString(1, "AMOUNT");
-					pstmt.setInt(2, amount);
+					pstmt.setString(1,"AMOUNT");
+					pstmt.setInt(2,amount);
 					break;
 				} else {
 					System.out.println("존재하지 않는 선택지입니다.");
@@ -155,20 +155,20 @@ public class PayManager {
 		}
 	}
 	public void delPay() {
+		System.out.println("===잠시만 기다려주세요===\n");
 		Connection conn = OracleDB.getOracleConnection();
-		String sql = "DELETE FROM PAYMENT WHERE PAY_NO = ? ";		
+		String sql = "UPDATE PAYMENT SET PAY_YN = 'Y' WHERE PAY_NO = ?";		
 		PreparedStatement pstmt = null;
 		int result = 0;
 		try {
 			pstmt = conn.prepareStatement(sql);
-			System.out.println("결제번호>> ");
+			System.out.println("취소하실 결제의 결제번호를 말씀해주세요");
+			System.out.print("결제번호>> ");
 			int payno = ObjController.scanInt();
-			
 			pstmt.setInt(1, payno);
-			
 			result = pstmt.executeUpdate();
-			if(result==1) System.out.println("결제삭제 성공!!!");
-			else System.out.println("결제삭제 실패...");
+			if(result==1) System.out.println("결제취소 성공!!!");
+			else System.out.println("결제취소 실패...");
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
