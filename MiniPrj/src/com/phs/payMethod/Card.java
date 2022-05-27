@@ -2,17 +2,19 @@ package com.phs.payMethod;
 
 public class Card {
 
-	public void payCard() {
+	public String payCard() {
 		boolean isNotValue = false;
 		while(!isNotValue) {
 		System.out.println("=============== 카드결제 ===============");
-		System.out.println("결제 하실 금액은 : " + "?" + "입니다.");
 		System.out.println("결제 하시겠습니까? (Y/N)");
 		String userInput = com.yogijogi.obj.ObjController.scanStr();
-		if(userInput.equals('Y')) {
+		if(userInput.equalsIgnoreCase("Y")) {
 			System.out.println("결제가 완료되었습니다.");
+			System.out.println("카드번호를 입력해주세요.");
+			System.out.println("(0000-0000-0000-0000 형식)");
+			String cardNumber = com.yogijogi.obj.ObjController.scanStr();
 			isNotValue = true;
-		}else if(userInput.equals('N')) {
+		}else if(userInput.equalsIgnoreCase("N")) {
 			System.out.println("메인 메뉴로 돌아갑니다.");
 			isNotValue = true;
 		}else {
@@ -20,6 +22,7 @@ public class Card {
 		}
 		}
 		//메인메뉴로 돌아가는 메소드
+		return "카드결제";
 	}
 	
 }
