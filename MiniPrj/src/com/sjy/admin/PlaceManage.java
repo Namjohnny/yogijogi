@@ -1,5 +1,6 @@
 package com.sjy.admin;
 
+
 import com.sjy.sql.PlaceSql;
 import com.yogijogi.obj.ObjController;
 
@@ -17,7 +18,7 @@ public class PlaceManage {
 		while (!wh1) {
 			
 			System.out.print("핫플종류: ");
-			System.out.println("1.음시점 2.문화체험 3.유흥");
+			System.out.println("1.음식점 2.문화체험 3.유흥");
 			System.out.println("처음화면으로:0");
 			System.out.print("선택:");
 			int place = ObjController.scanInt();
@@ -52,8 +53,10 @@ public class PlaceManage {
 					} else if (fc == 2) {
 						System.out.println("---------------추가---------------");
 						// 음식점 추가 
+						new PlaceSql().gPtye2(food);
+						//System.out.println(ftp2);
+						new PlaceSql().addPlace2(food);
 						new PlaceSql().addPlace1();
-						new PlaceSql().addPlace2();
 						continue;
 
 					} else if (fc == 3) {
