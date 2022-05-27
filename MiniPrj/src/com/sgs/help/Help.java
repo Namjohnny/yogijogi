@@ -3,6 +3,7 @@ package com.sgs.help;
 import java.io.IOException;
 import java.util.Scanner;
 
+import com.yogijogi.member.User;
 import com.yogijogi.obj.ObjController;
 
 public class Help {
@@ -11,7 +12,7 @@ public class Help {
 	
 	public Help(User user) throws IOException {
 		this.user = user;
-		if(user.getRank().equals("helper")) new Communication(user).server();
+		if(user.getRank().equals("H")) new Communication(user).server();
 		else showList();
 	}
 	

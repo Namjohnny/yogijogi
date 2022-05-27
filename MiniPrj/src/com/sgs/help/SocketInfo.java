@@ -3,6 +3,8 @@ package com.sgs.help;
 import java.io.IOException;
 import java.net.Socket;
 
+import com.yogijogi.member.User;
+
 public class SocketInfo {
 
     private final Socket socket;
