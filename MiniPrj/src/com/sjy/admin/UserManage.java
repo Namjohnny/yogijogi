@@ -10,7 +10,7 @@ public class UserManage {
 		System.out.println("사용자관리 화면");
 
 		System.out.println("===============사용자관리===============");
-		System.out.println("1.회원조회. 2.회원가입 3.회원정보수정 4.회원탈퇴 5.");
+		System.out.println("1.회원조회. 2.회원가입 3.회원정보수정 4.회원탈퇴 5.회원등급변경");
 		System.out.println("처음화면으로:0");
 		int userch = ObjController.scanInt();
 
@@ -54,7 +54,8 @@ public class UserManage {
 				System.out.println("탈퇴 완료");
 				continue;
 			} else if (userch == 5) {
-				System.out.println("---------------회원---------------");
+				System.out.println("---------------회원등급변경---------------");
+				
 				continue;
 
 			} else {

@@ -2,6 +2,7 @@ package com.sjy.user;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -126,8 +127,10 @@ public class User {
 		// db연동
 		String sql = "UPDATE MEMEBER SET DROP_YN='Y' WHERE ID ='"+ Login.id +"'";
 		Connection conn = OracleDB.getOracleConnection();
+		PreparedStatement pstmt =null;
+		
 		try {
-			PreparedStatement pstmt = conn.prepareStatement(sql);
+			pstmt = conn.prepareStatement(sql);
 			int result = pstmt.executeUpdate();
 			
 			if (result == 1) {
@@ -137,6 +140,8 @@ public class User {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}finally {
+			OracleDB.close(conn);OracleDB.close(pstmt);
 		}
 		
 		// 입력 받은 id값을 참고해서
