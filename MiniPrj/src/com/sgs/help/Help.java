@@ -15,7 +15,6 @@ public class Help {
 		if(user.getRank().equals("H")) new Communication(user).server();
 		else showList();
 	}
-	
 	public void showList() {
 		System.out.println("=====고객센터입니다=====");
 		while(true) {
