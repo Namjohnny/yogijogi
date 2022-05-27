@@ -14,29 +14,29 @@ public class Login {
 	// page.showPage(login.loginView());
 
 	public User loginView() {
-		//·Î±×ÀÎ È­¸é
+		//ë¡œê·¸ì¸ í™”ë©´
 		
-		//·Î±×ÀÎÃ¢
-		System.out.println("===== ·Î±×ÀÎ =====");
+		//ë¡œê·¸ì¸ì°½
+		System.out.println("===== ë¡œê·¸ì¸ =====");
 		System.out.print("ID : ");
 		String id = ObjController.scanStr();
 		System.out.print("PW : ");
 		String pwd = ObjController.scanStr();
 		User user = checkUser(id, pwd);
 		
-		//°¡ÀÔµÈ À¯ÀúÀÎÁö È®ÀÎ
+		//ê°€ì…ëœ ìœ ì €ì¸ì§€ í™•ì¸
 		if(user != null) {
 			User.LoginUserNo = user.getNo();
-			System.out.println("·Î±×ÀÎ ¼º°ø!");
+			System.out.println("ë¡œê·¸ì¸ ì„±ê³µ!");
 		}else {
-			System.out.println("·Î±×ÀÎ ½ÇÆĞ...");
+			System.out.println("ë¡œê·¸ì¸ ì‹¤íŒ¨...");
 		}
 		
 		return user;
 	}
 	
 	public User checkUser(String scanId, String scanPwd) {
-		//À¯Àú È®ÀÎ
+		//ìœ ì € í™•ì¸
 		
 		Connection conn = OracleDB.getOracleConnection();
 		PreparedStatement pstmt = null;
@@ -46,10 +46,10 @@ public class Login {
 			pstmt = conn.prepareStatement("SELECT * FROM MEMBER WHERE ID = ? AND PWD = ? AND DROP_YN = 'N'");
 			pstmt.setString(1, scanId);
 			pstmt.setString(2, scanPwd);
-			rs = pstmt.executeQuery();	// °á°úÁıÇÕÀ» ¾ò¾î¼­ rs ¿¡ ÀúÀå
-			// ÇöÀç °á°úÁıÇÕÀÇ Ä¿¼­´Â 0¹øÄ­(==ºñ¾îÀÖ´Â °ø°£)À» °¡¸®Å°´Â »óÅÂ 
-			//°á°úÁıÇÕ¿¡¼­, ÇöÀç Ä¿¼­°¡ °¡¸®Å°´Â row Áß Ä®·³¸íÀÌ MEM_NO ÀÎ °÷ÀÇ int Å¸ÀÔ µ¥ÀÌÅÍ¸¦ ÀĞ¾î¿È//¿¨ Áö±İÀº 0¹ørowÀÎµ¥ .... ¤Ğ¤Ğ ¿¡·¯ ¤Ğ¤Ğ
-			//ÀÌ·¡¼­ ÇÊ¿äÇÕ´Ï´Ù
+			rs = pstmt.executeQuery();	// ê²°ê³¼ì§‘í•©ì„ ì–»ì–´ì„œ rs ì— ì €ì¥
+			// í˜„ì¬ ê²°ê³¼ì§‘í•©ì˜ ì»¤ì„œëŠ” 0ë²ˆì¹¸(==ë¹„ì–´ìˆëŠ” ê³µê°„)ì„ ê°€ë¦¬í‚¤ëŠ” ìƒíƒœ 
+			//ê²°ê³¼ì§‘í•©ì—ì„œ, í˜„ì¬ ì»¤ì„œê°€ ê°€ë¦¬í‚¤ëŠ” row ì¤‘ ì¹¼ëŸ¼ëª…ì´ MEM_NO ì¸ ê³³ì˜ int íƒ€ì… ë°ì´í„°ë¥¼ ì½ì–´ì˜´//ì—¥ ì§€ê¸ˆì€ 0ë²ˆrowì¸ë° .... ã… ã…  ì—ëŸ¬ ã… ã… 
+			//ì´ë˜ì„œ í•„ìš”í•©ë‹ˆë‹¤
 			
 			if(rs.next()) {
 				int memNo = rs.getInt("MEM_NO");
@@ -66,7 +66,7 @@ public class Login {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			//ÀÚ¿ø Á¤¸®
+			//ìì› ì •ë¦¬
 			OracleDB.close(conn);
 			OracleDB.close(pstmt);
 			OracleDB.close(rs);
@@ -78,8 +78,8 @@ public class Login {
 	
 	
 //	public void rankUp(String userId) {
-//		//µî±Ş ¾÷ -> ±¤°í »èÁ¦
-//		//±¤°í »èÁ¦´Â DBÀÇ RANK°¡ Æ¯Á¤ ¼ıÀÚ ÀÌ»óÀÌ¸é »èÁ¦ °¡´É
+//		//ë“±ê¸‰ ì—… -> ê´‘ê³  ì‚­ì œ
+//		//ê´‘ê³  ì‚­ì œëŠ” DBì˜ RANKê°€ íŠ¹ì • ìˆ«ì ì´ìƒì´ë©´ ì‚­ì œ ê°€ëŠ¥
 //		
 //		Connection conn = OracleDB.getOracleConnection();
 //		PreparedStatement pstmt = null;
@@ -92,9 +92,9 @@ public class Login {
 //					
 //			
 //		} catch (SQLException e) {
-//			System.out.println("SQL °ü·Ã ¿¡·¯ !!!");
+//			System.out.println("SQL ê´€ë ¨ ì—ëŸ¬ !!!");
 //		} finally {
-//			//ÀÚ¿ø Á¤¸®
+//			//ìì› ì •ë¦¬
 //			OracleDB.close(conn);
 //			OracleDB.close(pstmt);
 //			OracleDB.close(rs);

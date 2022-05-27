@@ -2,7 +2,7 @@ package com.yogijogi.member;
 
 public class User {
 
-	//»ı¼ºÀÚ
+	//ìƒì„±ì
 	public User(int memNo, String id, String pwd, String uname, String nick, String rank, String dropYN) {
 		super();
 		this.memNo = memNo;
@@ -16,7 +16,7 @@ public class User {
 	
 	public static int LoginUserNo;
 	
-	//ÇÊµå
+	//í•„ë“œ
 	private int memNo;
 	private String id;
 	private String pwd;
@@ -77,7 +77,7 @@ public class User {
 	//toString
 	@Override
 	public String toString() {
-		return nick + "´Ô [¾ÆÀÌµğ:" + id + ", ÀÌ¸§:" + uname + ", µî±Ş:" + rank + "]";
+		return nick + "ë‹˜ [ì•„ì´ë””:" + id + ", ì´ë¦„:" + uname + ", ë“±ê¸‰:" + rank + "]";
 	}
 	
 	
