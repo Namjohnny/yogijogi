@@ -5,6 +5,8 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
 
+import com.yogijogi.member.User;
+
 public class MsgSenderThread extends Thread {
 
     private final Socket socket;

@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.Scanner;
 
 import com.yogijogi.obj.ObjController;
@@ -13,8 +14,8 @@ public class PayManager {
 	Scanner sc = new Scanner(System.in);
 	
 	public void showList() {
-		System.out.println("=====결제관리=====");
 		while(true) {
+			System.out.println("=====결제관리=====");
 			System.out.println("1.결제조회");
 			System.out.println("2.결제추가");
 			System.out.println("3.결제수정");
@@ -42,17 +43,23 @@ public class PayManager {
 			pstmt = conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();
 			while(rs.next()) {
-				int pno = rs.getInt("PNO");
-				String nick = rs.getString("NICK");
+				int payno = rs.getInt("PAY_NO");
+				int memno = rs.getInt("MEM_NO");
 				String paycon = rs.getString("PAYCON");
 				int amount = rs.getInt("AMOUNT");
-				System.out.print(pno);
+				String payyn = rs.getString("PAY_YN");
+				Date paydate = rs.getDate("PAY_DATE");
+				System.out.print(payno);
 				System.out.print(" | ");
-				System.out.print(nick);
+				System.out.print(memno);
 				System.out.print(" | ");
 				System.out.print(paycon);
 				System.out.print(" | ");
 				System.out.print(amount);
+				System.out.print(" | ");
+				System.out.print(payyn);
+				System.out.print(" | ");
+				System.out.print(paydate);
 				System.out.println();
 			}
 		} catch (SQLException e) {
@@ -66,27 +73,27 @@ public class PayManager {
 	}
 	public void addPay() {
 		Connection conn = OracleDB.getOracleConnection();
-		String sql = "INSERT INTO PAYMENT VALUES(?,?,?,?) ";		
+		String sql = "INSERT INTO PAYMENT(PAY_NO, MEM_NO, PAYCON, AMOUNT) "
+				   + "VALUES(PAYMENT_PNO_SEQ.NEXTVAL,?,?,?) ";		
 		PreparedStatement pstmt = null;
 		int result = 0;
 		try {
 			pstmt = conn.prepareStatement(sql);
-			System.out.println("결제번호>> ");
-			int pno = ObjController.scanInt();
-			System.out.println("닉네임>> ");
-			String nick = ObjController.scanStr();
-			System.out.println("결제내용>> ");
+			System.out.println("결제번호는 자동할당됩니다");
+			System.out.print("회원번호>> ");
+			String memno = ObjController.scanStr();
+			System.out.print("결제내용>> ");
 			String paycon = ObjController.scanStr();
-			System.out.println("결제금액>> ");
+			System.out.print("결제금액>> ");
 			int amount = ObjController.scanInt();
 			
-			pstmt.setInt(1, pno);
-			pstmt.setString(2, nick);
-			pstmt.setString(3, paycon);
-			pstmt.setInt(4, amount);
+			pstmt.setString(1, memno);
+			pstmt.setString(2, paycon);
+			pstmt.setInt(3, amount);
 			
 			result = pstmt.executeUpdate();
-			if(result==4) System.out.println("결제추가 성공!!!");
+			System.out.println(result);
+			if(result==1) System.out.println("결제추가 성공!!!");
 			else System.out.println("결제추가 실패...");
 			
 		} catch (SQLException e) {
@@ -99,7 +106,7 @@ public class PayManager {
 	}	
 	public void modPay() {
 		Connection conn = OracleDB.getOracleConnection();
-		String sql = "UPDATE PAYMENT SET ? = ? WHERE PNO = ?";		
+		String sql = "UPDATE PAYMENT SET ? = ? WHERE PAY_NO = ?";		
 		PreparedStatement pstmt = null;
 		int result = 0;
 		try {
@@ -110,14 +117,14 @@ public class PayManager {
 			int pno = ObjController.scanInt();
 			pstmt.setInt(3, pno);
 			while(true) {
-				System.out.println("수정하실 칼럼을 선택해주세요");
-				System.out.println("1.닉네임 | 2.결제내용 | 3.결제금액");
+				System.out.println("수정하실 사항을 선택해주세요");
+				System.out.println("1.회원번호 | 2.결제내용 | 3.결제금액");
 				int choice = ObjController.scanInt();
 				if(choice == 1) {
-					System.out.print("닉네임>> ");
-					String nick = ObjController.scanStr();
-					pstmt.setString(1, "NICK");
-					pstmt.setString(2, nick);
+					System.out.print("회원번호>> ");
+					int memno = ObjController.scanInt();
+					pstmt.setString(1, "MEM_NO");
+					pstmt.setInt(2, memno);
 					break;
 				} else if(choice == 2) {
 					System.out.print("결제내용>> ");
@@ -137,8 +144,8 @@ public class PayManager {
 				}
 			}
 			result = pstmt.executeUpdate();
-			if(result==4) System.out.println("결제추가 성공!!!");
-			else System.out.println("결제추가 실패...");
+			if(result==4) System.out.println("결제수정 성공!!!");
+			else System.out.println("결제수정 실패...");
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -149,18 +156,18 @@ public class PayManager {
 	}
 	public void delPay() {
 		Connection conn = OracleDB.getOracleConnection();
-		String sql = "DELETE FROM PAYMENT WHERE PNO = ? ";		
+		String sql = "DELETE FROM PAYMENT WHERE PAY_NO = ? ";		
 		PreparedStatement pstmt = null;
 		int result = 0;
 		try {
 			pstmt = conn.prepareStatement(sql);
 			System.out.println("결제번호>> ");
-			int pno = ObjController.scanInt();
+			int payno = ObjController.scanInt();
 			
-			pstmt.setInt(1, pno);
+			pstmt.setInt(1, payno);
 			
 			result = pstmt.executeUpdate();
-			if(result==4) System.out.println("결제삭제 성공!!!");
+			if(result==1) System.out.println("결제삭제 성공!!!");
 			else System.out.println("결제삭제 실패...");
 			
 		} catch (SQLException e) {

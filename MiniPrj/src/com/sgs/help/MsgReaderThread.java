@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 
+import com.yogijogi.member.User;
+
 public class MsgReaderThread extends Thread {
 
     private final Socket socket;

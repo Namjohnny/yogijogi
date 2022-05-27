@@ -5,6 +5,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+import com.yogijogi.member.User;
+
 public class Communication {
 
 	private User user;
