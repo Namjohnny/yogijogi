@@ -2,70 +2,27 @@ package com.phs.payment;
 
 public class PayRankUp {
 
-	// µî±Şº° °áÁ¦ ±İ¾×
-	// 
-	
 	public void vipRankUp() {
 		boolean isNotValue = false;
 		while(!isNotValue) {
-				System.out.println("VIP µî±Ş");
-				System.out.println("°áÁ¦ ±İ¾× : 30,000¿ø");
-				System.out.println("1. ±¤°í Á¦°Å");
-				System.out.println("2. 10% Àû¸³±İ");
-				System.out.println("µî±ŞÀ» up ÇÏ½Ã°Ú½À´Ï±î? (Y/N)");
-				String userInput = InputUtil.inputStr();
+				System.out.println("VIP ë“±ê¸‰");
+				System.out.println("ê²°ì œ ê¸ˆì•¡ : 30,000ì›");
+				System.out.println("1. ê´‘ê³  ì œê±°");
+				System.out.println("2. 10% ì ë¦½ê¸ˆ");
+				System.out.println("ë“±ê¸‰ì„ up í•˜ì‹œê² ìŠµë‹ˆê¹Œ? (Y/N)");
+				String userInput = com.yogijogi.obj.ObjController.scanStr();
 			if(userInput.equalsIgnoreCase("Y")) {
 				Pay.payNow01();
 				isNotValue = true;
-				// °áÁ¦ ¾È³»ÆäÀÌÁö·Î ÀÌµ¿
+				// ê²°ì œ ì•ˆë‚´í˜ì´ì§€ë¡œ ì´ë™
 			}else if(userInput.equalsIgnoreCase("N")) {
-				System.out.println("ÀÌÀü¸Ş´º·Î µ¹¾Æ°©´Ï´Ù.");
+				System.out.println("ì´ì „ë©”ë‰´ë¡œ ëŒì•„ê°‘ë‹ˆë‹¤.");
 				return;
 			}else {
-				System.out.println("Àß¸øµÈ ÀÔ·ÂÀÔ´Ï´Ù. ´Ù½Ã ¼±ÅÃÇØÁÖ¼¼¿ä.");
+				System.out.println("ì˜ëª»ëœ ì…ë ¥ì…ë‹ˆë‹¤. ë‹¤ì‹œ ì„ íƒí•´ì£¼ì„¸ìš”.");
 			}
 		}
 		
 	}
 	
-	
-//	public void silverRankUp() {
-//		boolean isNotValue = false;
-//		while(!isNotValue) {
-//				System.out.println("½Ç¹ö µî±Ş");
-//				System.out.println("1. ±¤°í Á¦°Å");
-//				System.out.println("2. 6% Àû¸³±İ");
-//				System.out.println("3. ¸®ºä µî·Ï½Ã Àû¸³±İ 1,000¿ø");
-//				System.out.println("4. ¸®ºä º¸±â 10°³");
-//				System.out.println("µî±ŞÀ» up ÇÏ½Ã°Ú½À´Ï±î? (Y/N)");
-//				String userInput = InputUtil.inputStr();
-//			if(userInput.equals("Y")) {
-//				isNotValue = true;
-//			}else if(userInput.equals("N")) {
-//				System.out.println("ÀÌÀü¸Ş´º·Î µ¹¾Æ°©´Ï´Ù.");
-//				RankUp();
-//			}else {
-//				System.out.println("Àß¸øµÈ ÀÔ·ÂÀÔ´Ï´Ù. ´Ù½Ã ¼±ÅÃÇØÁÖ¼¼¿ä.");
-//			}
-//		}
-//	}
-//	
-//	public void bronzeRankUp() {
-//		boolean isNotValue = false;
-//		while(!isNotValue) {
-//				System.out.println("ºê·ĞÁî µî±Ş");
-//				System.out.println("1. 3% Àû¸³±İ");
-//				System.out.println("3. ¸®ºä µî·Ï½Ã Àû¸³±İ 500¿ø");
-//				System.out.println("4. ¸®ºä º¸±â 5°³");
-//				System.out.println("µî±ŞÀ» up ÇÏ½Ã°Ú½À´Ï±î? (Y/N)");
-//				String userInput = InputUtil.inputStr();
-//			if(userInput.equals("Y")) {
-//				isNotValue = true;
-//			}else if(userInput.equals("N")) {
-//				System.out.println("ÀÌÀü¸Ş´º·Î µ¹¾Æ°©´Ï´Ù.");
-//				RankUp();
-//			}else {
-//				System.out.println("Àß¸øµÈ ÀÔ·ÂÀÔ´Ï´Ù. ´Ù½Ã ¼±ÅÃÇØÁÖ¼¼¿ä.");
-//			}
-//		}
-//	}
+}
