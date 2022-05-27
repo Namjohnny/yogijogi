@@ -1,21 +1,21 @@
 package com.sjy.admin;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
+import com.sgs.manager.PayManager;
+import com.sgs.manager.ReviewManager;
 import com.yogijogi.obj.ObjController;
 
 
 public class Admin {
 
 	public Admin() {
-		System.out.println("===============Time===============");
-		Date today = new Date();
-		SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd");
-		SimpleDateFormat time = new SimpleDateFormat("hh:mm:ss a");
-
-		System.out.println("Date: " + date.format(today));
-		System.out.println("Time: " + time.format(today));
+//		System.out.println("===============Time===============");
+//		Date today = new Date();
+//		SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd");
+//		SimpleDateFormat time = new SimpleDateFormat("hh:mm:ss a");
+//
+//		System.out.println("Date: " + date.format(today));
+//		System.out.println("Time: " + time.format(today));
 		System.out.println("===============관리자===============");
 		
 		System.out.println("관리자 페이지");
@@ -36,8 +36,8 @@ public class Admin {
 		else if(Choice==1) {new PlaceManage().showList();}
 		else if(Choice==2) {new UserManage().showList();}
 		else if(Choice==3) {new RsvManage().showList();}
-		else if(Choice==4) {}//new PayManager().showList();
-		else if(Choice==5) {}//new ReviewManager().showList();
+		else if(Choice==4) {new PayManager().showList();}
+		else if(Choice==5) {new ReviewManager().showList();}
 		else {System.out.println("숫자를 다시 입력해주세요");}
 		
 	}
