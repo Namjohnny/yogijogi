@@ -23,29 +23,23 @@ public class PlaceSql {
 	String qUpdate;
 	String qDelete;
 
-	// 번호 확인
-	public int numCheck(int num) {
-		String chSelect = "SELECT PNO FROM PLACE WHERE PNO = ?";
-		try {
-			pstmt = conn.prepareStatement(chSelect);
-			pstmt.setInt(1, num);
 
-			rs = pstmt.executeQuery();
-			while (rs.next()) {
-				return 1;// 번호있음
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		return -1;// 번호없음
-	}
 
 	// 핫플보기
-	public void viewPlace() {
-		String qSelect = " SELECT PNO, PNAME, LOCA, pt.PTNO, PTYPE1, PTYPE2 FROM PLACE p "
-				+ "JOIN PLACETYPE pt ON p.PTNO = pt.PTNO WHERE  p.DELETE_YN = 'N' order by pno" ;
-
+	public void viewPlace(String place) {
+		System.out.println(place);
+//		String qSelect = " SELECT PNO, PNAME, LOCA, pt.PTNO, PTYPE1, PTYPE2 FROM PLACE p "
+//				+ "JOIN PLACETYPE pt ON p.PTNO = pt.PTNO "
+//				+ "WHERE  p.DELETE_YN = 'N'"
+//				+ "AND pt.PTYPE1 = '음식점'"
+//				+ " order by pno" ;
+		String qSelect = " SELECT PNO, PNAME, LOCA, pt.PTNO, PTYPE1, PTYPE2 "
+				+ " FROM PLACE p "
+				+ "JOIN PLACETYPE pt "
+				+ "ON p.PTNO = pt.PTNO "
+				+ "WHERE  p.DELETE_YN = 'N'"
+				+ "and pt.PTYPE1 = '"+ place +"'"
+				+ "order by pno";		
 		try {
 			pstmt = conn.prepareStatement(qSelect);
 			ResultSet rs = pstmt.executeQuery();
@@ -69,11 +63,7 @@ public class PlaceSql {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} finally {
-			OracleDB.close(conn);
-			OracleDB.close(pstmt);
-			OracleDB.close(rs);
-		}
+		} finally {OracleDB.close(conn);OracleDB.close(pstmt);OracleDB.close(rs);}
 
 	}
 
@@ -84,15 +74,15 @@ public class PlaceSql {
 		String qSelect2 = " SELECT PNO, PNAME, LOCA, pt.PTNO, PTYPE1, PTYPE2 " + "FROM PLACE p "
 				+ "JOIN PLACETYPE pt ON p.PTNO = pt.PTNO " + "WHERE  p.DELETE_YN = 'N' AND p.PNO = '" + num + "'";
 
-		checknum = numCheck(num);
+		checknum = new numCheck().pnumCheck(num);
 		if (checknum == 1) {
 			try {
 				pstmt = conn.prepareStatement(qSelect2);
 				ResultSet rs = pstmt.executeQuery();
 
-				System.out.print("번호" + " | ");
-				System.out.print("세부지역1" + " | ");
-				System.out.print("세부지역2" + " | ");
+				System.out.print("번호" + "|");
+				System.out.print("대분류" + "|");
+				System.out.print("소분류" + "|");
 
 				while (rs.next()) {
 					Place.dto.setPtno(rs.getInt("PTNO"));
@@ -109,11 +99,7 @@ public class PlaceSql {
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			} finally {
-				OracleDB.close(conn);
-				OracleDB.close(pstmt);
-				OracleDB.close(rs);
-			}
+			} finally {OracleDB.close(conn);OracleDB.close(pstmt);OracleDB.close(rs);}
 		} else {
 			System.out.println("※없는 번호 입니다...※");
 			detailtype();
@@ -146,11 +132,7 @@ public class PlaceSql {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			System.out.println("sql에러");
-		} finally {
-			OracleDB.close(conn);
-			OracleDB.close(pstmt);
-			OracleDB.close(rs);
-		}
+		} finally {OracleDB.close(conn);OracleDB.close(pstmt);OracleDB.close(rs);}
 
 	}
 
@@ -195,8 +177,7 @@ public class PlaceSql {
 		String qUpdate1 = "UPDATE PLACE SET PNAME= ?, LOCA =? WHERE PNO = ? order by pno";
 		String qUpdate2 = "UPDATE PLACETYPE SET PTYPE1 = ?, PTYPE2 =? WHERE PTNO = ? order by pno";
 
-		checknum = numCheck(updPlace);
-
+		checknum = new numCheck().pnumCheck(updPlace);
 		// 번호가 db에 있는 지없는지 판별
 		int result1, result2 = 0;
 		if (checknum == 1) {
@@ -251,9 +232,8 @@ public class PlaceSql {
 					}
 
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
+			}finally {OracleDB.close(conn);OracleDB.close(pstmt);OracleDB.close(rs);}
 		} else {
 			System.out.println("번호에 맞는 장소가 없습니다.");
 		}
@@ -261,19 +241,22 @@ public class PlaceSql {
 	}// modPlace()
 
 	public void delPlace() {
-		System.out.print("수정할 장소 번호 입력:");
+		System.out.print("삭제할 장소 번호 입력:");
 		int delPlace = ObjController.scanInt();
 		// 번호가 db에 있는 지없는지 판별
 
 		// db연동
-		String sql = "UPDATE PLACE SET DELETE_YN='Y' WHERE PNO ='" + delPlace + "'";
+		String sql = "UPDATE PLACE SET DELETE_YN='Y' WHERE PNO = ?";
 
-		checknum = numCheck(delPlace);
+		checknum = new numCheck().pnumCheck(delPlace);
+		
 		if (checknum == 1) {
 			try {
+				
 				pstmt = conn.prepareStatement(sql);
+				pstmt.setInt(1, delPlace);
 				int result = pstmt.executeUpdate();
-
+				
 				if (result == 1) {
 					System.out.println(delPlace + "번 장소 삭제완료");
 				} else {
@@ -281,9 +264,8 @@ public class PlaceSql {
 				}
 
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
+			}finally {OracleDB.close(conn);OracleDB.close(pstmt);OracleDB.close(rs);}
 		} else {
 			System.out.println("※없는 번호 입니다...※");
 			delPlace();
