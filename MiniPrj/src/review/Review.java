@@ -52,9 +52,11 @@ public static void showReviewList() {
 			e.printStackTrace();
 		}
 		
+		showReviewDetail();
+		
 	}
 	
-public static void showReviewdetail() {
+public static void showReviewDetail() {
 		
 		System.out.println("=====리뷰 상세 보기=====");
 		
@@ -68,16 +70,16 @@ public static void showReviewdetail() {
 		
 		System.out.println("=====리뷰작성=====");
 		System.out.print("제목 : ");
-		String title = ObjController.scan.nextLine();
+		String title = ObjController.scanStr();
 		System.out.print("평점 : ");
-		String score = ObjController.scan.nextLine();
+		String score = ObjController.scanStr();
 		System.out.print("내용 : ");
-		String content = ObjController.scan.nextLine();
+		String content = ObjController.scanStr();
 		
 		
 		Connection conn = OracleDB.getOracleConnection();
 		
-		String sql = "INSERT INTO REVIEW(TITLE, SCORE, CONTENT)" + "VALUES(?, ?, ?)";
+		String sql = "INSERT INTO REVIEW(TITLE, SCORE, REVIEW)" + "VALUES(?, ?, ?)";
 		
 		PreparedStatement pstmt = null;
 		try {
@@ -85,10 +87,19 @@ public static void showReviewdetail() {
 			pstmt.setString(1, title);
 			pstmt.setString(2, score);
 			pstmt.setString(3, content);
+			int result = pstmt.executeUpdate();
+			if(result == 1) {
+				System.out.println("리뷰 등록 성공");
+			}else {
+				System.out.println("리뷰 등록 실패");
+			}
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}
+		}finally {
+	         OracleDB.close(conn);
+	         OracleDB.close(pstmt);
+	      }
 		
 	}
 	
