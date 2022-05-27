@@ -12,41 +12,41 @@ import com.yogijogi.obj.OracleDB;
 public class Join {
 	
 	public boolean joinView() {
-		System.out.println("=====È¸¿ø°¡ÀÔ=====");
+		System.out.println("=====íšŒì›ê°€ìž…=====");
 		System.out.print("ID : ");
 		String scanId = ObjController.scanStr();
 		System.out.print("PW : ");
 		String scanPwd = ObjController.scanStr();
-		System.out.print("¼º¸í : ");
+		System.out.print("ì„±ëª… : ");
 		String scanName = ObjController.scanStr();
-		System.out.print("´Ð³×ÀÓ : ");
+		System.out.print("ë‹‰ë„¤ìž„ : ");
 		String scanNick = ObjController.scanStr();
-		System.out.println("»ý³â¿ùÀÏ 8ÀÚ¸®¸¦ ÀÔ·ÂÇØÁÖ¼¼¿ä. (ex:19950627)");
+		System.out.println("ìƒë…„ì›”ì¼ 8ìžë¦¬ë¥¼ ìž…ë ¥í•´ì£¼ì„¸ìš”. (ex:19950627)");
 		System.out.print(">> ");
 		String scanBirth = ObjController.scanStr();
-		System.out.println("¼ºº° (M || F)");
+		System.out.println("ì„±ë³„ (M || F)");
 		System.out.print(">> ");
 		String scanGen = ObjController.scanStr();
 		
 		if(scanPwd.length() < 8) {
-			// ºñ¹Ð¹øÈ£ 8±ÛÀÚ ¹Ì¸¸ÀÏ ½Ã °¡ÀÔ ½ÇÆÐ
-			System.out.println("ºñ¹Ð¹øÈ£´Â 8±ÛÀÚ ÀÌ»óÀÌ¾î¾ß ÇÕ´Ï´Ù!");
+			// ë¹„ë°€ë²ˆí˜¸ 8ê¸€ìž ë¯¸ë§Œì¼ ì‹œ ê°€ìž… ì‹¤íŒ¨
+			System.out.println("ë¹„ë°€ë²ˆí˜¸ëŠ” 8ê¸€ìž ì´ìƒì´ì–´ì•¼ í•©ë‹ˆë‹¤!");
 			return false;
 		}
 		if(!(scanBirth.matches("[+-]?\\d*(\\.\\d+)?") && (scanBirth.length() == 8))) {
-			// ÁÖ¹Î¹øÈ£¸¦ ¼ýÀÚ 8ÀÚ¸®°¡ ¾Æ´Ï°Ô ÀÔ·ÂÇß´Ù¸é °¡ÀÔ ½ÇÆÐ
-			System.out.println("»ý³â¿ùÀÏ 8ÀÚ¸®·Î ÀÔ·ÂÇØÁÖ¼¼¿ä!");
+			// ì£¼ë¯¼ë²ˆí˜¸ë¥¼ ìˆ«ìž 8ìžë¦¬ê°€ ì•„ë‹ˆê²Œ ìž…ë ¥í–ˆë‹¤ë©´ ê°€ìž… ì‹¤íŒ¨
+			System.out.println("ìƒë…„ì›”ì¼ 8ìžë¦¬ë¡œ ìž…ë ¥í•´ì£¼ì„¸ìš”!");
 			return false;
 		}
 		if(!(scanGen.equals("M") || scanGen.equals("F"))) {
-			// ¼ºº°¿¡ M, F, m, f¸¦ ÀÔ·ÂÇÏÁö ¾Ê¾Ò´Ù¸é °¡ÀÔ ½ÇÆÐ
-			System.out.println("M ¶Ç´Â F¸¸ ÀÔ·Â °¡´ÉÇÕ´Ï´Ù!");
+			// ì„±ë³„ì— M, F, m, fë¥¼ ìž…ë ¥í•˜ì§€ ì•Šì•˜ë‹¤ë©´ ê°€ìž… ì‹¤íŒ¨
+			System.out.println("M ë˜ëŠ” Fë§Œ ìž…ë ¥ ê°€ëŠ¥í•©ë‹ˆë‹¤!");
 			return false;
 		}
 		
 		if(!(overlapID(scanId)||overlapNick(scanNick))) {
 		userJoin(scanId, scanPwd, scanName, scanNick, scanBirth, scanGen);
-		System.out.println("°¡ÀÔÀÌ ¿Ï·áµÇ¾ú½À´Ï´Ù!");
+		System.out.println("ê°€ìž…ì´ ì™„ë£Œë˜ì—ˆìŠµë‹ˆë‹¤!");
 		return true;
 		}
 		
@@ -72,9 +72,9 @@ public class Join {
 			rs = pstmt.executeQuery();
 			
 		} catch (SQLException e) {
-			System.out.println("SQL °ü·Ã ¿¡·¯ !!!");
+			System.out.println("SQL ê´€ë ¨ ì—ëŸ¬ !!!");
 		} finally {
-			//ÀÚ¿ø Á¤¸®
+			//ìžì› ì •ë¦¬
 			OracleDB.close(conn);
 			OracleDB.close(pstmt);
 			OracleDB.close(rs);
@@ -94,14 +94,14 @@ public class Join {
 			rs = pstmt.executeQuery();
 			
 			if(rs.next()) {
-				System.out.println("Áßº¹µÈ ¾ÆÀÌµðÀÔ´Ï´Ù !!!");
+				System.out.println("ì¤‘ë³µëœ ì•„ì´ë””ìž…ë‹ˆë‹¤ !!!");
 				return true;
 			}
 			
 		} catch (SQLException e) {
-			System.out.println("SQL °ü·Ã ¿¡·¯ !!!");
+			System.out.println("SQL ê´€ë ¨ ì—ëŸ¬ !!!");
 		} finally {
-			//ÀÚ¿ø Á¤¸®
+			//ìžì› ì •ë¦¬
 			OracleDB.close(conn);
 			OracleDB.close(pstmt);
 			OracleDB.close(rs);
@@ -123,14 +123,14 @@ public boolean overlapNick(String userNick) {
 			rs = pstmt.executeQuery();
 			
 			if(rs.next()) {
-				System.out.println("Áßº¹µÈ ´Ð³×ÀÓÀÔ´Ï´Ù !!!");
+				System.out.println("ì¤‘ë³µëœ ë‹‰ë„¤ìž„ìž…ë‹ˆë‹¤ !!!");
 				return true;
 			}
 			
 		} catch (SQLException e) {
-			System.out.println("SQL °ü·Ã ¿¡·¯ !!!");
+			System.out.println("SQL ê´€ë ¨ ì—ëŸ¬ !!!");
 		} finally {
-			//ÀÚ¿ø Á¤¸®
+			//ìžì› ì •ë¦¬
 			OracleDB.close(conn);
 			OracleDB.close(pstmt);
 			OracleDB.close(rs);
