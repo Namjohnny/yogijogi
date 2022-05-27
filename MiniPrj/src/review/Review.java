@@ -6,6 +6,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 
+import javax.naming.spi.DirStateFactory.Result;
+
+import com.yogijogi.member.User;
 import com.yogijogi.obj.ObjController;
 import com.yogijogi.obj.OracleDB;
 
@@ -50,6 +53,10 @@ public static void showReviewList() {
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
+		}finally {
+			OracleDB.close(conn);
+			OracleDB.close(rs);
+			OracleDB.close(pstmt);
 		}
 		
 		showReviewDetail();
@@ -59,14 +66,46 @@ public static void showReviewList() {
 public static void showReviewDetail() {
 		
 		System.out.println("=====리뷰 상세 보기=====");
+		System.out.println("조회할 게시글 번호 입력 : ");
+		int no = ObjController.scanInt();
 		
 		Connection conn = OracleDB.getOracleConnection();
 		
+		String sql = "SEELECT* FROM REVIEW WHERE NO = ? AND DELETE_YN = 'N'";
 		
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, no);
+			rs = pstmt.executeQuery(sql);
+			
+			if(rs.next()) {
+				String title = (rs).getString("TITLE");
+				String content = (rs).getString("CONTENT");
+				
+				System.out.println(title);
+				System.out.println(content);
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			OracleDB.close(conn);
+			OracleDB.close(rs);
+			OracleDB.close(pstmt);
+		}
 		
 	}
 	
 	public void updateReview() {
+		
+		//작성자 로그인한 유저 확인
+		if(User.LoginUserNo == 0) {
+			System.out.println("로그인 한 유저만 글을 쓸 수 있습니다.");
+			return;
+		}
 		
 		System.out.println("=====리뷰작성=====");
 		System.out.print("제목 : ");
@@ -79,7 +118,7 @@ public static void showReviewDetail() {
 		
 		Connection conn = OracleDB.getOracleConnection();
 		
-		String sql = "INSERT INTO REVIEW(TITLE, SCORE, REVIEW)" + "VALUES(?, ?, ?)";
+		String sql = "INSERT INTO REVIEW(TITLE, PNO, SCORE, REVIEW)" + "VALUES(?, ?, ?)";
 		
 		PreparedStatement pstmt = null;
 		try {
@@ -103,7 +142,7 @@ public static void showReviewDetail() {
 		
 	}
 	
-	public static void deleteReview() {
+	public void deleteReview() {
 		
 		
 		
