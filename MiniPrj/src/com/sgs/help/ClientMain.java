@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import com.yogijogi.member.User;
 
-public class CMain {
+public class ClientMain {
 
 	public static void main(String[] args) {
 		
