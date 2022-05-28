@@ -6,11 +6,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import com.phs.payment.PayRankUp;
 import com.sgs.help.Help;
 import com.yogijogi.obj.ObjController;
 import com.yogijogi.obj.OracleDB;
 
 public class MyPage {
+	
+	PayRankUp payrankup = new PayRankUp();
 	
 	
 	public void showPage(User user) {
@@ -24,9 +27,10 @@ public class MyPage {
 			System.out.println("3. 예약 내역");
 			System.out.println("4. 결제 내역");
 			System.out.println("5. 리뷰 확인");
-			System.out.println("6. 회원 탈퇴");
-			System.out.println("7. 고객 센터");
-			System.out.println("8. 나가기");
+			System.out.println("6. VIP 등급 상승");
+			System.out.println("7. 회원 탈퇴");
+			System.out.println("8. 고객 센터");
+			System.out.println("9. 나가기");
 			System.out.print("번호 입력>> ");
 			int pageNum = ObjController.scanInt();
 			
@@ -50,17 +54,22 @@ public class MyPage {
 				//리뷰 확인
 				break;
 			case 6:
-				//회원 탈퇴
-				memDrop(user.getMemNo());
+				//VIP 등급 업
+				payrankup.vipRankUp();
 				break;
 			case 7:
+				//회원 탈퇴
+				memDrop(user.getMemNo());
+				myPageOut = true;
+				break;
+			case 8:
 				//고객 센터
 				try {
 					new Help(user);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-			case 8:
+			case 9:
 				//마이페이지에서 나가기
 				myPageOut = true;
 				break;
