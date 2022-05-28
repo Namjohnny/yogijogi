@@ -20,6 +20,18 @@ public class Place {
 		this.ptype2 = ptype2;
 	}
 	
+	
+	
+	public Place(int pno, String pname, String loca, int ptno, String ptype1, String ptype2) {
+		super();
+		this.pno = pno;
+		this.pname = pname;
+		this.loca = loca;
+		this.ptno = ptno;
+		this.ptype1 = ptype1;
+		this.ptype2 = ptype2;
+	}
+
 	//get set
 	public int getPno() {
 		return pno;

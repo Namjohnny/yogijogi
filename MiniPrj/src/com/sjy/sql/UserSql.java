@@ -34,18 +34,9 @@ public class UserSql {
 
 		return -1;// 번호없음
 	}
-	
-	//등그변경
-	public void changeRank() {
-		
-		//랭크변경할 회원번호 입력 받기
-		
-		//Admin
-		
-		//Vip
-		
-		
-		//Help
+
+	public void ShowList() {
+
 		
 	}
 	
