@@ -1,5 +1,6 @@
 package com.sjy.admin;
 
+import com.sjy.sql.RsvSql;
 import com.yogijogi.obj.ObjController;
 
 public class RsvManage {
@@ -11,21 +12,28 @@ public class RsvManage {
 			boolean b = false;
 			while (!b) {
 				System.out.println("===============예약관리===============");
-				System.out.println("1.예약확인 2.예약수정 3.예약삭제");
+				System.out.println("1.예약확인| 2.예약등록| 3.예약수정| 4.예약취소|");
 				System.out.println("처음화면으로:0");
-				int chrsv = ObjController.scanInt();
+				String chrsv = ObjController.scanStr();
+				
 
-				if (chrsv == 0) {
+				if ("0".equals(chrsv)) {
 					b = true;
 					new Admin();
 				}
 
-				else if (chrsv == 1) {
+				else if ("1".equals(chrsv)) {
 					System.out.println("===============예약확인===============");
 					System.out.println("사용자 전체예약 정보 보여주기");
 					// 예약 테이블 보여주기
+					new RsvSql().RsvView();
+					
 					continue;
-				} else if (chrsv == 2) {
+				} else if ("2".equals(chrsv)) {
+					System.out.println("===============예약등록===============");
+					new RsvSql().delRsv();
+					continue;
+				} else if ("3".equals(chrsv)) {
 					System.out.println("===============예약수정===============");
 
 					System.out.print("수정 예약 번호:");
@@ -35,16 +43,13 @@ public class RsvManage {
 					System.out.println("예약수정중");
 					System.out.println("수정완료");
 					continue;
-
-				} else if (chrsv == 3) {
-					System.out.println("===============예약삭제===============");
-					// 수정 내용 Update
-					System.out.print("삭제 예약 번호:");
-					String rsvDtN = ObjController.scanStr();
-					System.out.println("삭제 완료");
+					
+				} 
+				else if ("4".equals(chrsv)) {
+					System.out.println("===============예약취소===============");
+					new RsvSql().delRsv();
 					continue;
 				}
-
 				else {
 					System.out.println("재입력");
 					continue;

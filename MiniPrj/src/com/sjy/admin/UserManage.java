@@ -1,5 +1,6 @@
 package com.sjy.admin;
 
+import com.yogijogi.member.Join;
 import com.yogijogi.obj.ObjController;
 
 public class UserManage {
@@ -25,13 +26,12 @@ public class UserManage {
 
 				System.out.println("---------------회원조회---------------");
 				// 회원정보 보여주는 메서드 (전체 or 특정회원 선택?)
-				
+				new SearchUser();
 				continue;
 			} else if (userch == 2) {
 				System.out.println("---------------회원가입---------------");
 				// 회원가입메서드 (회원정보 입력 및 db저장)
-
-				System.out.println("회원가입 완료");
+				new Join().joinView();
 				continue;
 				
 			} else if (userch == 3) {
