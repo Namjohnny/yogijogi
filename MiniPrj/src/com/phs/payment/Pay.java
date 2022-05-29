@@ -9,6 +9,7 @@ import java.sql.Timestamp;
 import com.yogijogi.member.Login;
 import com.yogijogi.member.MyPage;
 import com.yogijogi.member.User;
+import com.yogijogi.obj.ObjController;
 
 
 public class Pay {
@@ -57,7 +58,7 @@ public class Pay {
 			com.yogijogi.obj.OracleDB.close(pstmt2);
 		}
 		
-		String sql3 = "UPDATE MEMBER SET RANK = V WHERE MEM_NO = ? ";
+		String sql3 = "UPDATE MEMBER SET RANK = 'V' WHERE MEM_NO = ? ";
 		
 		PreparedStatement pstmt3 = null;
 		try {
@@ -151,19 +152,20 @@ public class Pay {
 		
 		System.out.println("결제 내역 확인");
 		Connection conn = com.yogijogi.obj.OracleDB.getOracleConnection();
-		String sql = "SELECT"
+		String sql = "SELECT "
 				+ "M.NICK 닉네임"
+				+ ", P.PAY_NO"
 				+ ", P.PAYCON"
 				+ ", P.AMOUNT"
 				+ ", PM.PNAME"
 				+ ", P.PAY_YN"
-				+ ", P.PAY_DATE"
-				+ "FROM MEMBER M"
-				+ "JOIN PAYMENT P"
-				+ "ON M.MEM_NO = P.MEM_NO"
-				+ "JOIN PAYMETHOD PM"
-				+ "ON P.PAY_NO = PM.PM_NO"
-				+ "WHERE P.MEM_NO = ?";
+				+ ", P.PAY_DATE "
+				+ "FROM MEMBER M "
+				+ "JOIN PAYMENT P "
+				+ "ON M.MEM_NO = P.MEM_NO "
+				+ "JOIN PAYMETHOD PM "
+				+ "ON P.PAY_NO = PM.PM_NO "
+				+ "WHERE P.MEM_NO = ? ";
 		PreparedStatement pstmt = null;
 		try {
 			pstmt = conn.prepareStatement(sql);
@@ -171,6 +173,8 @@ public class Pay {
 			ResultSet rs = pstmt.executeQuery();
 			
 			System.out.print("닉네임");
+			System.out.print(" | ");
+			System.out.print("결제번호");
 			System.out.print(" | ");
 			System.out.print("결제내용");
 			System.out.print(" | ");
@@ -184,14 +188,17 @@ public class Pay {
 			System.out.println("\n --------------------------------------------");
 			
 			while(rs.next()) {
-				String nick = rs.getString("M.NICK");
-				String payCon = rs.getString("P.PAYCON");
-				int amt = rs.getInt("P.AMOUNT");
-				String pName = rs.getString("PM.PNAME");
-				String pCancel = rs.getString("P.PAY_YN");
-				Timestamp pd = rs.getTimestamp("P.PAY_DATE");
+				String nick = rs.getString("NICK");
+				String payNo = rs.getString("PAY_NO");
+				String payCon = rs.getString("PAYCON");
+				int amt = rs.getInt("AMOUNT");
+				String pName = rs.getString("PNAME");
+				String pCancel = rs.getString("PAY_YN");
+				Timestamp pd = rs.getTimestamp("PAY_DATE");
 				
 				System.out.print(nick);
+				System.out.print(" | ");
+				System.out.print(payNo);
 				System.out.print(" | ");
 				System.out.print(payCon);
 				System.out.print(" | ");
@@ -204,10 +211,6 @@ public class Pay {
 				System.out.print(pd);
 				System.out.println();
 				
-				// 스캐너 사용해서 번호입력받고
-				// 번호를 변수에 저장해준다음
-				// payCancel 에 변수 넘겨주면
-				
 			}
 			
 		} catch (SQLException e) {
@@ -217,15 +220,33 @@ public class Pay {
 			com.yogijogi.obj.OracleDB.close(pstmt);
 		}
 		
-		if(payCancel()) {
+		System.out.println("===== 결제 취소 선택 =====");
+		System.out.println("1. 결체 취소하기");
+		System.out.println("2. 돌아가기");
+		
+		int pageNum = ObjController.scanInt();
+		if(pageNum == 1) {
+			payCancel(payCancelChoice());
+		}else if(pageNum == 2) {
+			return;
+		}else {
+			System.out.println("잘못된 입력입니다. 돌아갑니다.");
 			return;
 		}
+		
+		
+	}
+	
+	public int payCancelChoice() {
+		
+		System.out.println("결제를 취소하실 항목의 결제번호를 입력하시오.");
+		int userInput = ObjController.scanInt();
+		return userInput;
 		
 	}
 	
 	
-	public boolean payCancel() {
-		
+	public void payCancel(int a) {
 		MyPage mp = new MyPage();
 		boolean isNotValue = false;
 		while(!isNotValue) {
@@ -235,23 +256,25 @@ public class Pay {
 			if(userInput.equalsIgnoreCase("Y")) {
 				PreparedStatement pstmt1 = null, pstmt2 = null;
 				Connection conn = com.yogijogi.obj.OracleDB.getOracleConnection();
-				String sql1 = "UPDATE PAYMENT SET PAY_YN = Y WHERE MEM_NO = ?";
-				String sql2 = "UPDATE RESERVATION SET CANCEL = Y WHERE MEM_NO = ?";
+				String sql1 = "UPDATE PAYMENT SET PAY_YN = 'Y' WHERE MEM_NO = ? AND PAY_NO = ?";
+				String sql2 = "UPDATE RESERVATION SET CANCEL = 'Y' WHERE MEM_NO = ?";
 				try {
 					pstmt1 = conn.prepareStatement(sql1);
 					pstmt1.setInt(1, com.yogijogi.member.User.LoginUserNo);
+					pstmt1.setInt(2, a);
 					pstmt1.executeUpdate();
-					pstmt2 = conn.prepareStatement(sql1);
+					pstmt2 = conn.prepareStatement(sql2);
 					pstmt2.setInt(1, com.yogijogi.member.User.LoginUserNo);
 					pstmt2.executeUpdate();
 					int result = pstmt2.executeUpdate();
 					if(result == 1) {
 						System.out.println("결제가 취소되었습니다.");
-						System.out.println("메인 화면으로 돌아갑니다.");
-						return true;
+						System.out.println("이전 화면으로 돌아갑니다.");
+						payList();
 					}else {
 						System.out.println("오류 발생.");
-						System.out.println("메인 화면으로 돌아갑니다.");
+						System.out.println("이전 화면으로 돌아갑니다.");
+						payList();
 					}
 				} catch (SQLException e) {
 					e.printStackTrace();
@@ -260,12 +283,10 @@ public class Pay {
 					com.yogijogi.obj.OracleDB.close(pstmt1);
 					com.yogijogi.obj.OracleDB.close(pstmt2);
 				}
-
 				isNotValue = true;
-				// 결제 안내페이지로 이동
 			}else if(userInput.equalsIgnoreCase("N")) {
 				System.out.println("이전메뉴로 돌아갑니다.");
-				return true;
+				payList();
 			}else {
 				System.out.println("잘못된 입력입니다. 다시 선택해주세요.");
 			}
