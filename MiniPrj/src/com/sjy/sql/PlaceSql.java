@@ -29,10 +29,11 @@ public class PlaceSql {
 	//모든장소 보여주기
 	public ArrayList<Place> showListAll() {
 		ArrayList<Place> dtos = new ArrayList<Place>();
+		ResultSet rs=null;
 		String sql = "SELECT PNO,PNAME, LOCA, P.PTNO, PT.PTYPE1, PT.PTYPE2 FROM PLACE P JOIN PLACETYPE PT ON P.PTNO = PT.PTNO order by pno";
 		try {
 			pstmt = conn.prepareStatement(sql);
-			ResultSet rs = pstmt.executeQuery();
+			rs = pstmt.executeQuery();
 
 			while(rs.next()) {
 				int pNo = rs.getInt("PNO");
@@ -48,10 +49,11 @@ public class PlaceSql {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}
+		}finally {OracleDB.close(conn);OracleDB.close(pstmt);OracleDB.close(rs);}
 		
 		return dtos;
 	}
+	
 	//구별로 장소 보여주기
 	public ArrayList<Place> showListlc(String lc) {
 		ArrayList<Place> dtos = new ArrayList<Place>();
@@ -76,15 +78,14 @@ public class PlaceSql {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}
+		}finally {OracleDB.close(conn);OracleDB.close(pstmt);OracleDB.close(rs);}
 		
 		return dtos;
 	}
 		
 		
-		
+	//대분류별 장소 보여주기
 	public void showList(String place) {
-		System.out.println(place);
 //		String qSelect = " SELECT PNO, PNAME, LOCA, pt.PTNO, PTYPE1, PTYPE2 FROM PLACE p "
 //				+ "JOIN PLACETYPE pt ON p.PTNO = pt.PTNO "
 //				+ "WHERE  p.DELETE_YN = 'N'"
@@ -194,6 +195,9 @@ public class PlaceSql {
 		String p2 = ObjController.scanStr();
 		int fnum = 0;
 		fnum = fType1( p2);
+		if (fnum==-1) {
+			return;
+		}
 		insertPlace(fnum);
 
 		return;
@@ -212,8 +216,11 @@ public class PlaceSql {
 		System.out.print("소분류: ");
 		String p2 = ObjController.scanStr();
 		int culNum = 0;
-
 		culNum = cType1( p2);
+		if (culNum==-1) {
+			return;
+		}
+		
 
 		insertPlace(culNum);
 
@@ -234,6 +241,9 @@ public class PlaceSql {
 		String p2 = ObjController.scanStr();
 		int pNum = 0;
 		pNum = pType1( p2);
+		if (pNum==-1) {
+			return;
+		}
 		insertPlace(pNum);
 
 	}
@@ -280,7 +290,8 @@ public class PlaceSql {
 		System.out.print("수정할 장소 번호 입력:");
 		int updPlace = ObjController.scanInt();
 		String pname, ploca, ptype2;
-
+		ResultSet rs =null;
+		
 		String getdata = " SELECT PNO, PNAME, LOCA, pt.PTNO, PTYPE1, PTYPE2 " 
 				+ "FROM PLACE p " + "JOIN PLACETYPE pt"
 				+ " ON p.PTNO = pt.PTNO " 
@@ -303,7 +314,7 @@ public class PlaceSql {
 				pstmt = conn.prepareStatement(getdata);
 				pstmt.setInt(1, updPlace);
 				pstmt.setString(2, place);
-				ResultSet rs = pstmt.executeQuery();
+				rs = pstmt.executeQuery();
 				
 				if (rs.next()) {
 					System.out.println("선택한 핫플정보");
@@ -336,9 +347,9 @@ public class PlaceSql {
 					System.out.println("소분류 입력오류"); return;}
 				
 				System.out.println(num);
-				System.out.print("핫플이름:");
+				System.out.print("장소이름:");
 				pname = ObjController.scanStr();
-				System.out.print("핫플지역");
+				System.out.print("장소지역");
 				ploca = ObjController.scanStr();
 
 				PreparedStatement pstmt1 = conn.prepareStatement(qUpdate1);
@@ -371,10 +382,12 @@ public class PlaceSql {
 
 	}// modPlace()
 
+	
+	//장소삭제
 	public void delPlace(String place) {
 		System.out.print("삭제할 장소 번호 입력:");
 		int delPlace = ObjController.scanInt();
-
+		ResultSet rs =null;
 		// 입력받은 번호의 ptno / ptype2가져오기
 		String getno = "SELECT P.PNO, PTYPE2, PT.PTNO FROM PLACE P JOIN PLACETYPE PT ON P.PTNO = PT.PTNO WHERE PNO =?";
 		PreparedStatement pstmtg;
@@ -384,7 +397,7 @@ public class PlaceSql {
 		try {
 			pstmtg = conn.prepareStatement(getno);
 			pstmtg.setInt(1, delPlace);
-			ResultSet rs = pstmtg.executeQuery();
+			rs = pstmtg.executeQuery();
 
 			if (rs.next()) {
 				String gpt2 = rs.getString("PTYPE2");
@@ -435,7 +448,7 @@ public class PlaceSql {
 			}
 		catch (SQLException e1) {
 			e1.printStackTrace();
-		}
+		}finally {OracleDB.close(conn);OracleDB.close(pstmt);OracleDB.close(rs);}
 		}else{System.out.println("1이상의 자연수를 입력해주세요");}
 }// delPlace()
 			 
@@ -466,11 +479,25 @@ public class PlaceSql {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}finally {OracleDB.close(conn);OracleDB.close(pstmt);OracleDB.close(rs);}
 		return "실패";
 	}
 
 	//--------------------------------------------------------------------------------
+	
+	//보류
+	public void getPtype1() {
+		//대분류 가져오기
+		String sql = "SELECT DISTINCT PTYPE1 FROM PLACETYPE";
+		
+	}
+	
+	public void getPtype2() {
+		//소분류 가져오기
+		String sql = "SELECT DISTINCT PTYPE2 FROM PLACETYPE";
+	}
+	//보류
+	
 	//분류
 	public int fType1( String p2){
 		int fNum;
@@ -486,7 +513,7 @@ public class PlaceSql {
 			fNum = 5;
 		} else {
 			System.out.println("소분류를 다시입력해주세요");
-			return fType1(p2);
+			return -1;
 		}
 		return fNum;
 	}
@@ -505,7 +532,7 @@ public class PlaceSql {
 			cNum = 10;
 		} else {
 			System.out.println("소분류를 다시입력해주세요");
-			return cType1(p2);
+			return -1;
 		}
 		return cNum;
 	}
@@ -518,7 +545,7 @@ public class PlaceSql {
 			pNum = 12;
 		} else {
 			System.out.println("소분류를 다시입력해주세요");
-			return pType1( p2);
+			return -1;
 		}
 		return pNum;
 	}

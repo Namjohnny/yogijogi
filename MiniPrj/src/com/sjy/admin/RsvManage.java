@@ -31,17 +31,11 @@ public class RsvManage {
 					continue;
 				} else if ("2".equals(chrsv)) {
 					System.out.println("===============예약등록===============");
-					new RsvSql().delRsv();
+					new RsvSql().addRsv();
 					continue;
 				} else if ("3".equals(chrsv)) {
 					System.out.println("===============예약수정===============");
-
-					System.out.print("수정 예약 번호:");
-					int rsvUdN = ObjController.scanInt();
-					// 수정 함수
-					// 예약수정
-					System.out.println("예약수정중");
-					System.out.println("수정완료");
+					new RsvSql().modRsv();
 					continue;
 					
 				} 
