@@ -58,8 +58,10 @@ public class Main {
 				System.out.println("1. 마이페이지");
 				System.out.println("2. 서울 핫플");
 				System.out.println("3. 핫플 검색");
-				System.out.println("4. 고객 센터");
-				System.out.println("5. 종료");
+				System.out.println("4. 리뷰 게시판");
+				System.out.println("5. 예약 페이지");
+				System.out.println("6. 고객 센터");
+				System.out.println("7. 종료");
 				System.out.print("번호 입력 >> ");
 				listNum = ObjController.scanInt();
 				
@@ -75,6 +77,13 @@ public class Main {
 					//서울 핫플 검색하기
 					break;
 				case 4 :
+					//리뷰 게시판
+					// ReviewMain을 main문이 아니라 메소드로 수정 후 해당 메소드 이곳에 넣기
+				case 5 :
+					//예약 페이지
+					// Reservation.addRsv(user);
+					// 위와 같이 메소드에서 user를 넣을 때, 매개변수로 (User user)를 받기
+				case 6 :
 					//고객 센터
 					try {
 						new Help(user);
@@ -82,7 +91,7 @@ public class Main {
 						e.printStackTrace();
 					}
 					break;
-				case 5 :
+				case 7 :
 					// 종료
 					mainList = false;
 					break;

@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import com.phs.payment.Pay;
 import com.phs.payment.PayRankUp;
 import com.sgs.help.Help;
 import com.yogijogi.obj.ObjController;
@@ -14,6 +15,7 @@ import com.yogijogi.obj.OracleDB;
 public class MyPage {
 	
 	PayRankUp payrankup = new PayRankUp();
+	Pay pay = new Pay();
 	
 	
 	public void showPage(User user) {
@@ -49,6 +51,7 @@ public class MyPage {
 				break;
 			case 4:
 				//결제 내역 확인
+				pay.payList();
 				break;
 			case 5:
 				//리뷰 확인
