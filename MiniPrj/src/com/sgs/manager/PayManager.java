@@ -6,13 +6,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Scanner;
 
+import com.yogijogi.member.User;
 import com.yogijogi.obj.ObjController;
 import com.yogijogi.obj.OracleDB;
 
 public class PayManager {
 	Scanner sc = new Scanner(System.in);
 	
-	public PayManager() {
+	public PayManager(User user) {
 		showList();
 	}
 	
