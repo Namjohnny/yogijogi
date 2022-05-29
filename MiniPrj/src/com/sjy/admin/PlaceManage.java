@@ -7,13 +7,13 @@ import com.yogijogi.obj.ObjController;
 
 public class PlaceManage {
 
-	String food = "음식점";
-	String culture = "문화체험";
-	String pleasure = "유흥";
+	private  String food = "음식점";
+	private  String culture = "문화체험";
+	private  String pleasure = "유흥";
 
 	// 등록된 핫플 관리 //---------------
 	public void showList() {// ===============
-		System.out.println("===============핫플===============");
+		System.out.println("===============서울핫플===============");
 		System.out.println("핫플관리");
 		// 핫플 테이블 가져오기 + 데이터 보여주기
 		boolean wh1 = false;
@@ -21,7 +21,7 @@ public class PlaceManage {
 		while (!wh1) {
 			System.out.println("--------------------------------");
 			System.out.println("※등록,수정,삭제는 분류별로 입력됩니다.");
-			System.out.println("1.핫플검색 | 2.핫플조회 | 3.핫플등록 | 4. 핫플수정| 5.핫플삭제 ");
+			System.out.println(" 1.핫플조회 | 2.핫플등록 | 3. 핫플수정| 4.핫플삭제 ");
 			System.out.println("처음화면으로:0");
 
 			System.out.print("선택: ");
@@ -30,22 +30,19 @@ public class PlaceManage {
 				// wh2 = true;
 				wh1 = true;
 				new Admin();
-			} else if (ch == 1) {
-				System.out.println("검색화면으로이동");
-				// new Search();
-			} else if (ch == 2) {
+			}else if (ch == 1) {
 				searchPlace();
-			} else if (ch == 3) {
+			} else if (ch == 2) {
 				// 핫플등록
 				System.out.println("1.음식점 2.문화체험 3.유흥");
 				int inch = ObjController.scanInt();
 				addPlace(inch);
-			} else if (ch == 4) {
+			} else if (ch == 3) {
 				// 핫플수정
 				System.out.println("1.음식점 2.문화체험 3.유흥");
 				int modch = ObjController.scanInt();
 				modPlace(modch);
-			} else if (ch == 5) {
+			} else if (ch == 4) {
 				// 핫플삭제
 				System.out.println("1.음식점 2.문화체험 3.유흥");
 				int delch = ObjController.scanInt();
@@ -62,7 +59,7 @@ public class PlaceManage {
 	}// showList
 
 	public void searchPlace() {
-		System.out.println("---------------검색---------------");
+		System.out.println("---------------조회---------------");
 		System.out.println("1.모두 2.구별 3.분류별 ");
 		int ch2 = ObjController.scanInt();
 		if (ch2 == 1) {
@@ -76,7 +73,7 @@ public class PlaceManage {
 			int shch = ObjController.scanInt();
 			search(shch);
 			
-		}
+		}else {System.out.println("번호를 다시 입력해주세요"); return;}
 
 	}
 	//검색
@@ -189,7 +186,7 @@ public class PlaceManage {
 			int ptNo = dtos.get(i).getPtno();
 			String ptType1 = dtos.get(i).getPtype1();
 			String ptType2 = dtos.get(i).getPtype2();
-
+			
 			System.out.print(pNo + " | ");
 			System.out.print(pName + " | ");
 			System.out.print(pLoca + " | ");
@@ -201,4 +198,6 @@ public class PlaceManage {
 		System.out.println();
 	}// view(lc)
 
+
+	
 }// class
