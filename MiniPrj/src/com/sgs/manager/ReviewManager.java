@@ -24,7 +24,7 @@ public class ReviewManager {
 		while(true) {
 			System.out.println("\n=====리뷰관리=====");
 			System.out.println("1.리뷰조회");
-			System.out.println("2.리뷰추가");
+			System.out.println("2.리뷰등록");
 			System.out.println("3.리뷰수정");
 			System.out.println("4.리뷰삭제");
 			System.out.println("0.리뷰관리 종료");
@@ -71,10 +71,8 @@ public class ReviewManager {
 				System.out.print(" | ");
 				System.out.print(wdate);
 				System.out.print(" | ");
-				System.out.print(deleteyn);
-				System.out.print(" | ");
+				System.out.println(deleteyn);
 				System.out.println("리뷰 >> "+review);
-				System.out.println();
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -88,28 +86,35 @@ public class ReviewManager {
 	public void addReview() {
 		System.out.println("===잠시만 기다려주세요===\n");
 		Connection conn = OracleDB.getOracleConnection();
-		String sql = "INSERT INTO PAYMENT(PAY_NO, MEM_NO, PAYCON, AMOUNT) "
-				   + "VALUES(PAYMENT_PNO_SEQ.NEXTVAL,?,?,?) ";		
+		String sql = "INSERT INTO REVIEW(R_NO, MEM_NO, PNO, TITLE, SCORE, REVIEW, DELETE_YN) "
+				   + "VALUES(REVIEW_SEQ.NEXTVAL,?,?,?,?,?,?) ";		
 		PreparedStatement pstmt = null;
 		int result = 0;
 		try {
 			pstmt = conn.prepareStatement(sql);
-			System.out.println("결제번호는 자동할당됩니다");
+			System.out.println("리뷰번호는 자동할당됩니다");
 			System.out.print("회원번호>> ");
 			int memno = ObjController.scanInt();
-			System.out.print("결제내용>> ");
-			String paycon = ObjController.scanStr();
-			System.out.print("결제금액>> ");
-			int amount = ObjController.scanInt();
+			System.out.print("핫플번호>> ");
+			int pno = ObjController.scanInt();
+			System.out.print("제목>> ");
+			String title = ObjController.scanStr();
+			System.out.print("평점(0~5)>> ");
+			int score = ObjController.scanInt();
+			System.out.print("리뷰>> ");
+			String review = ObjController.scanStr();
+
 			
 			pstmt.setInt(1, memno);
-			pstmt.setString(2, paycon);
-			pstmt.setInt(3, amount);
+			pstmt.setInt(2, pno);
+			pstmt.setString(3, title);
+			pstmt.setInt(4, score);
+			pstmt.setString(5, review);
+			pstmt.setString(6, "N");
 			
 			result = pstmt.executeUpdate();
-			System.out.println(result);
-			if(result==1) System.out.println("결제추가 성공!!!");
-			else System.out.println("결제추가 실패...");
+			if(result==1) System.out.println("리뷰등록 성공!!!");
+			else System.out.println("리뷰등록 실패...");
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -180,13 +185,13 @@ public class ReviewManager {
 		int result = 0;
 		try {
 			pstmt = conn.prepareStatement(sql);
-			System.out.println("취소하실 리뷰의 리뷰번호를 말씀해주세요");
+			System.out.println("삭제하실 리뷰의 리뷰번호를 말씀해주세요");
 			System.out.print("리뷰번호>> ");
 			int payno = ObjController.scanInt();
 			pstmt.setInt(1, payno);
 			result = pstmt.executeUpdate();
-			if(result==1) System.out.println("리뷰취소 성공!!!");
-			else System.out.println("리뷰취소 실패...");
+			if(result==1) System.out.println("리뷰삭제 성공!!!");
+			else System.out.println("리뷰삭제 실패...");
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
