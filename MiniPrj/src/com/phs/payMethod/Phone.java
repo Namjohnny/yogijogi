@@ -11,7 +11,7 @@ public class Phone {
 		System.out.println("결제 하시겠습니까? (Y/N)");
 		String userInput = com.yogijogi.obj.ObjController.scanStr();
 		if(userInput.equalsIgnoreCase("Y")) {
-			System.out.println("핸드폰 번호를 입력바랍니다.");
+			System.out.println("핸드폰 번호를 입력바랍니다. 하이픈(-) 제외");
 			int phoneNumber = com.yogijogi.obj.ObjController.scanInt();
 			isNotValue = true;
 		}else if(userInput.equalsIgnoreCase("N")) {
