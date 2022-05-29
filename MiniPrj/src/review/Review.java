@@ -20,7 +20,7 @@ public static void showReviewList() {
 		
 		Connection conn = OracleDB.getOracleConnection();
 		
-		String sql ="SELECT * FROM REVIEW WHERE R_NO ORDER BY REGISTER_DATE DESC";
+		String sql ="SELECT * FROM REVIEW WHERE DELETE_YN = 'N' ORDER BY R_NO DESC";
 		
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -43,12 +43,24 @@ public static void showReviewList() {
 			System.out.print("\n============");
 			
 			while(rs.next()) {
-				int rno = rs.getInt("RNO");
-				int mno = rs.getInt("MNO");
+				int rno = rs.getInt("R_NO");
+				int mno = rs.getInt("MEM_NO");
 				int prno = rs.getInt("PNO");
 				String title = rs.getString("TITLE");
 				String score = rs.getString("SCORE");
-				Timestamp rdate = rs.getTimestamp("RDATE");
+				Timestamp rdate = rs.getTimestamp("WDATE");
+				
+				System.out.print(rno);
+				System.out.print("|");
+				System.out.print(mno);
+				System.out.print("|");
+				System.out.print(prno);
+				System.out.print("|");
+				System.out.print(title);
+				System.out.print("|");
+				System.out.print(score);
+				System.out.print("|");
+				System.out.print(rdate);
 			}
 			
 		} catch (SQLException e) {
@@ -66,12 +78,12 @@ public static void showReviewList() {
 public static void showReviewDetail() {
 		
 		System.out.println("=====리뷰 상세 보기=====");
-		System.out.println("조회할 게시글 번호 입력 : ");
+		System.out.print("조회할 게시글 번호 입력 : ");
 		int no = ObjController.scanInt();
 		
 		Connection conn = OracleDB.getOracleConnection();
 		
-		String sql = "SEELECT* FROM REVIEW WHERE NO = ? AND DELETE_YN = 'N'";
+		String sql = "SEELECT * FROM REVIEW WHERE R_NO = ? AND DELETE_YN = 'N'";
 		
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -82,10 +94,12 @@ public static void showReviewDetail() {
 			rs = pstmt.executeQuery(sql);
 			
 			if(rs.next()) {
-				String title = (rs).getString("TITLE");
-				String content = (rs).getString("CONTENT");
+				String title = rs.getString("TITLE");
+				String score = rs.getString("SCORE");
+				String content = rs.getString("CONTENT");
 				
 				System.out.println(title);
+				System.out.println(score);
 				System.out.println(content);
 			}
 			
@@ -99,15 +113,16 @@ public static void showReviewDetail() {
 		
 	}
 	
-	public void updateReview() {
+	public static void updateReview() {
 		
-		//작성자 로그인한 유저 확인
 		if(User.LoginUserNo == 0) {
 			System.out.println("로그인 한 유저만 글을 쓸 수 있습니다.");
 			return;
 		}
 		
 		System.out.println("=====리뷰작성=====");
+		System.out.println("핫플 번호");
+		int pno = ObjController.scanInt();
 		System.out.print("제목 : ");
 		String title = ObjController.scanStr();
 		System.out.print("평점 : ");
@@ -118,14 +133,17 @@ public static void showReviewDetail() {
 		
 		Connection conn = OracleDB.getOracleConnection();
 		
-		String sql = "INSERT INTO REVIEW(TITLE, PNO, SCORE, REVIEW)" + "VALUES(?, ?, ?)";
+		String sql = "INSERT INTO REVIEW(R_NO, MEM_NO, PNO, TITLE, SCORE, REVIEW, DELETE_YN)" 
+		+ "VALUES(REVIEW_NO_SEQ.NEXTVAL, ?, ?, ?, ?, SYSDATE, 'N')";
 		
 		PreparedStatement pstmt = null;
 		try {
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, title);
-			pstmt.setString(2, score);
-			pstmt.setString(3, content);
+			pstmt.setInt(1, User.LoginUserNo);
+			pstmt.setInt(2, pno);
+			pstmt.setString(3, title);
+			pstmt.setString(4, score);
+			pstmt.setString(5, content);
 			int result = pstmt.executeUpdate();
 			if(result == 1) {
 				System.out.println("리뷰 등록 성공");
@@ -139,12 +157,6 @@ public static void showReviewDetail() {
 	         OracleDB.close(conn);
 	         OracleDB.close(pstmt);
 	      }
-		
-	}
-	
-	public void deleteReview() {
-		
-		
 		
 	}
 	
