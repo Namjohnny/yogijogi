@@ -84,7 +84,7 @@ public static void showReviewDetail() {
 		
 		Connection conn = OracleDB.getOracleConnection();
 		
-		String sql = "SEELECT * FROM REVIEW WHERE R_NO = ? AND DELETE_YN = 'N'";
+		String sql = "SELECT * FROM REVIEW WHERE R_NO = ? AND DELETE_YN = 'N'";
 		
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;

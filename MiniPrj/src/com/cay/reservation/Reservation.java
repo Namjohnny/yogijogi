@@ -65,50 +65,51 @@ public class Reservation {
 
 	//예약하기
 	public static void addRsv() {
-		if(User.LoginUserNo == 0) { //유저넘버 0은 없으니까 접근 못하게 리턴함. 
-			System.out.println("로그인한 유저만 예약할 수 있습니다.");
-			return;
-		}
-		Connection conn = OracleDB.getOracleConnection();
-		
-		System.out.println("==== 예약 페이지 ====");
-		System.out.println("예약 원하는 가게 번호를 입력하세요");
-		int pNo = ObjController.scanInt();
-		System.out.print("예약 날짜 (yy-mm-dd) : ");
-		String rsvDate = ObjController.scanStr();
+        if(User.LoginUserNo == 0) { //유저넘버 0은 없으니까 접근 못하게 리턴함. 
+            System.out.println("로그인한 유저만 예약할 수 있습니다.");
+            return;
+        }
+        Connection conn = OracleDB.getOracleConnection();
 
-		String sql = "INSERT INTO RESERVATION(RSV_NO, MEM_NO, P_NO, RSV_DATE, CANCEL)"
-				+ "VALUES(RESERVATION_NO_SEQ.NEXTVAL, ?, ?, to_date(?, 'yyyy/mm/dd'), 'N')";
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		try {
-			pstmt = conn.prepareStatement(sql);
-			//로그인 연결... 가져오기...? executQurery.. 
-			rs = pstmt.executeQuery();
-			//1, 2 > 로그인한 계정의 데이터와 핫플의 정보가 들어가게 수정...!!
+        System.out.println("==== 예약 페이지 ====");
+        System.out.println("예약 원하는 가게 번호를 입력하세요");
+        int pNo = ObjController.scanInt();
+        System.out.print("예약 날짜 (yy-mm-dd) : ");
+        String rsvDate = ObjController.scanStr();
 
-			pstmt.setInt(1, User.LoginUserNo);
-			pstmt.setInt(2, pNo);
-			pstmt.setString(3, rsvDate);
-			
-			int result = pstmt.executeUpdate();
-			if(result == 1) {
-				System.out.println("예약금 20,000원을 결제합니다.");
-				OracleDB.close(conn);
-				OracleDB.close(pstmt);
-				Pay.payNow02();
-			}else {
-				System.out.println("예약 실패..");
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			OracleDB.close(conn);
-			OracleDB.close(pstmt);	
-			OracleDB.close(rs);
-		}
-		
-	}
+        String sql = "INSERT INTO RESERVATION(RSV_NO, MEM_NO, P_NO, RSV_DATE, CANCEL)"
+                + "VALUES(RESERVATION_NO_SEQ.NEXTVAL, ?, ?, TO_DATE(?), 'N')";
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        try {
+            pstmt = conn.prepareStatement(sql);
+            //로그인 연결... 가져오기...? executQurery.. 
+            pstmt.setInt(1, User.LoginUserNo);
+            pstmt.setInt(2, pNo);
+            pstmt.setString(3, rsvDate);
+//            rs = pstmt.executeQuery();
+//            rs.next();
+            //1, 2 > 로그인한 계정의 데이터와 핫플의 정보가 들어가게 수정...!!
+
+
+            int result = pstmt.executeUpdate();
+            if(result == 1) {
+                System.out.println("예약금 20,000원을 결제합니다.");
+                OracleDB.close(conn);
+                OracleDB.close(pstmt);
+                Pay.payNow02();
+            }else {
+                System.out.println("예약 실패..");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            OracleDB.close(conn);
+            OracleDB.close(pstmt);
+            OracleDB.close(rs);
+        }
+
+    }
 	
 	
 	//예약 확인
@@ -178,6 +179,7 @@ public class Reservation {
 		PreparedStatement pstmt2 = null;
 		ResultSet rs = null;		
 		ResultSet rs2 = null;
+		int rsvNo = 0;
 	
 		//변경 날짜 입력 받기
 		System.out.print("변경 원하는 날짜와 시간 : ");
@@ -192,7 +194,7 @@ public class Reservation {
 			pstmt = conn.prepareStatement(sql1);
 			rs = pstmt.executeQuery();
 			rs.next();
-			int rsvNo = rs.getInt("RSV_NO");
+			rsvNo = rs.getInt("RSV_NO");
 			
 			pstmt2 = conn.prepareStatement(sql2);
 			pstmt2.setString(1, rsvDate);
@@ -203,9 +205,10 @@ public class Reservation {
 		}
 		
 		// 변경된 뷰 출력
-		String view = "SELECT * FROM RSV_VIEW";
+		String view = "SELECT * FROM RSV_VIEW WHERE RSV_NO = ?";
 		try {
 			pstmt = conn.prepareStatement(view);
+			pstmt.setInt(1, rsvNo);
 			rs = pstmt.executeQuery();
 			
 			if(rs.next()) {
