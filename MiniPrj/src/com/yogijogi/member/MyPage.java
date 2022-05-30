@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import com.cay.reservation.Reservation;
 import com.phs.payment.Pay;
 import com.phs.payment.PayRankUp;
 import com.sgs.help.Help;
@@ -16,6 +17,7 @@ public class MyPage {
 	
 	PayRankUp payrankup = new PayRankUp();
 	Pay pay = new Pay();
+	Reservation rsv = new Reservation();
 	
 	
 	public void showPage(User user) {
@@ -48,6 +50,7 @@ public class MyPage {
 				break;
 			case 3:
 				//예약 내역 확인
+				rsv.showList();
 				break;
 			case 4:
 				//결제 내역 확인
@@ -121,6 +124,7 @@ public class MyPage {
 				OracleDB.close(pstmt);
 				OracleDB.close(rs);
 			}	
+			User.LoginUserNo = -1;
 			System.out.println("회원 탈퇴가 완료되었습니다!");
 		case "아니오":
 			break;
