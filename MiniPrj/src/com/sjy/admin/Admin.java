@@ -31,7 +31,7 @@ public class Admin {
 		System.out.println("1. 핫플관리");
 		System.out.println("2. 사용자관리");
 		System.out.println("3. 예약관리");
-		System.out.println("4. 광고관리");
+		System.out.println("4. 결제관리");
 		System.out.println("5. 리뷰관리");
 		System.out.println("6. 로그아웃");
 		System.out.println("0. 종료");

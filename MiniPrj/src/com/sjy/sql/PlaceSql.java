@@ -15,9 +15,9 @@ public class PlaceSql {
 
 	int checknum = 0;
 	// db접속
-	Connection conn = OracleDB.getOracleConnection();
-	PreparedStatement pstmt, pstmt2 = null;
-	ResultSet rs = null;
+//	Connection conn = OracleDB.getOracleConnection();
+//	PreparedStatement pstmt, pstmt2 = null;
+//	ResultSet rs = null;
 	Place p = new Place();
 
 	String qUpdate;
@@ -29,8 +29,10 @@ public class PlaceSql {
 	//모든장소 보여주기
 	public ArrayList<Place> showListAll() {
 		ArrayList<Place> dtos = new ArrayList<Place>();
+		Connection conn = OracleDB.getOracleConnection();
+		PreparedStatement pstmt=null;
 		ResultSet rs=null;
-		String sql = "SELECT PNO,PNAME, LOCA, P.PTNO, PT.PTYPE1, PT.PTYPE2 FROM PLACE P JOIN PLACETYPE PT ON P.PTNO = PT.PTNO order by pno";
+		String sql = "SELECT PNO,PNAME, LOCA, P.PTNO, PT.PTYPE1, PT.PTYPE2 FROM PLACE P JOIN PLACETYPE PT ON P.PTNO = PT.PTNO WHERE DELETE_YN='N' order by pno";
 		try {
 			pstmt = conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();
@@ -57,12 +59,16 @@ public class PlaceSql {
 	//구별로 장소 보여주기
 	public ArrayList<Place> showListlc(String lc) {
 		ArrayList<Place> dtos = new ArrayList<Place>();
+		Connection conn = OracleDB.getOracleConnection();
+		PreparedStatement pstmt=null;
+		ResultSet rs=null;
+		
 		String sql = "SELECT PNO,PNAME, LOCA, P.PTNO, PT.PTYPE1, PT.PTYPE2 FROM PLACE P JOIN PLACETYPE PT ON P.PTNO = PT.PTNO "
 				+ "where loca like'서울 "+lc+ "%'"
-				+ "order by pno";
+				+ "and DELETE_YN='N' order by pno";
 		try {
 			pstmt = conn.prepareStatement(sql);
-			ResultSet rs = pstmt.executeQuery();
+			rs = pstmt.executeQuery();
 
 			while(rs.next()) {
 				int pNo = rs.getInt("PNO");
@@ -91,6 +97,9 @@ public class PlaceSql {
 //				+ "WHERE  p.DELETE_YN = 'N'"
 //				+ "AND pt.PTYPE1 = '음식점'"
 //				+ " order by pno" ;
+		Connection conn = OracleDB.getOracleConnection();
+		PreparedStatement pstmt=null;
+		ResultSet rs=null;
 		String qSelect = " SELECT PNO, PNAME, LOCA, pt.PTNO, PTYPE1, PTYPE2 " 
 				+ " FROM PLACE p " + "JOIN PLACETYPE pt "
 				+ "ON p.PTNO = pt.PTNO " 
@@ -100,7 +109,7 @@ public class PlaceSql {
 		try {
 			pstmt = conn.prepareStatement(qSelect);
 			pstmt.setString(1, place);
-			ResultSet rs = pstmt.executeQuery();
+			rs = pstmt.executeQuery();
 
 			System.out.print("번호" + " | ");
 			System.out.print("이름" + " | ");
@@ -129,7 +138,54 @@ public class PlaceSql {
 		}
 
 	}
+	
+	//분류별료 번호 이름 지역만
+	public void showList2(String place) {
+//		String qSelect = " SELECT PNO, PNAME, LOCA, pt.PTNO, PTYPE1, PTYPE2 FROM PLACE p "
+//				+ "JOIN PLACETYPE pt ON p.PTNO = pt.PTNO "
+//				+ "WHERE  p.DELETE_YN = 'N'"
+//				+ "AND pt.PTYPE1 = '음식점'"
+//				+ " order by pno" ;
+		Connection conn = OracleDB.getOracleConnection();
+		PreparedStatement pstmt=null;
+		ResultSet rs=null;
+		String qSelect = " SELECT PNO, PNAME, LOCA, pt.PTNO, PTYPE1, PTYPE2 " 
+				+ " FROM PLACE p " + "JOIN PLACETYPE pt "
+				+ "ON p.PTNO = pt.PTNO " 
+				+ "WHERE  p.DELETE_YN = 'N'" 
+				+ "and pt.PTYPE1 = ?" 
+				+ "order by pno";
+		try {
+			pstmt = conn.prepareStatement(qSelect);
+			pstmt.setString(1, place);
+			rs = pstmt.executeQuery();
 
+			System.out.print("번호" + " | ");
+			System.out.print("이름" + " | ");
+			System.out.print("지역" + " | ");
+			System.out.println();
+			while (rs.next()) {
+				p.setPno(rs.getInt("PNO"));
+				p.setPname(rs.getString("PNAME"));
+				p.setLoca(rs.getString("LOCA"));
+
+				System.out.print(p.getPno() + " | ");
+				System.out.print(p.getPname() + " | ");
+				System.out.print(p.getLoca() + " | ");
+				System.out.println();
+
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			System.out.println();
+			OracleDB.close(conn);
+			OracleDB.close(pstmt);
+			OracleDB.close(rs);
+		}
+
+	}
 	// ----------------------------------------------------------------------------------------------------------------------------
 	// 세부 정보 확인
 	public void detailtype(String place) {
@@ -137,17 +193,20 @@ public class PlaceSql {
 		System.out.println(place);
 		System.out.print("세부정보확인: ");
 		int num = ObjController.scanInt();
-
+		
+		Connection conn = OracleDB.getOracleConnection();
+		PreparedStatement pstmt=null;
+		ResultSet rs=null;
 		String qSelect2 = "SELECT PNO, PNAME, LOCA, pt.PTNO, PTYPE1, PTYPE2 " + "FROM PLACETYPE pt " + "JOIN PLACE p "
 				+ "ON p.PTNO = pt.PTNO " + "WHERE  p.DELETE_YN = 'N' " + "AND p.PNO = ?" + "AND pt.PTYPE1 = ?";
 
 		checknum = new numCheck().pnumCheck(num);
 		if (checknum == 1) {
 			try {
-				PreparedStatement pstmt = conn.prepareStatement(qSelect2);
+				pstmt = conn.prepareStatement(qSelect2);
 				pstmt.setInt(1, num);
 				pstmt.setString(2, place);
-				ResultSet rs = pstmt.executeQuery();
+				rs = pstmt.executeQuery();
 
 				while (rs.next()) {
 					System.out.print("번호" + "|");
@@ -250,11 +309,19 @@ public class PlaceSql {
 	
 	//장소삽입 공통부분
 	public void insertPlace(int placeNum) {
+		Connection conn = OracleDB.getOracleConnection();
+		PreparedStatement pstmt=null;
+		ResultSet rs=null;
 		try {
+			
+			String qInsert1 = "INSERT INTO PLACE(PNO, PNAME, LOCA, PTNO)" 
+					+ " VALUES(PLACE_PTNO_SEQ.NEXTVAL,?,?,?)";
+
+			conn =  OracleDB.getOracleConnection();
+			pstmt = conn.prepareStatement(qInsert1);
+			
 			System.out.println("--장소|지역--");
 
-			String qInsert1 = "INSERT INTO PLACE(PNO, PNAME, LOCA, PTNO)" 
-			+ " VALUES(PLACE_PTNO_SEQ.NEXTVAL,?,?,?)";
 			System.out.println("지역명은 지역명 구명 순으로 입력해주세요");
 			System.out.println("장소등록");
 			System.out.print("장소명: ");
@@ -270,7 +337,7 @@ public class PlaceSql {
 			
 			int result = pstmt.executeUpdate();
 			if (result == 1) {
-				System.out.println("---------");
+				System.out.println("---등록완료---");
 			}
 
 		} catch (SQLException e) {
@@ -278,7 +345,6 @@ public class PlaceSql {
 		} finally {
 			OracleDB.close(conn);
 			OracleDB.close(pstmt);
-			OracleDB.close(pstmt2);
 			OracleDB.close(rs);
 		}
 		return;
@@ -290,7 +356,10 @@ public class PlaceSql {
 		System.out.print("수정할 장소 번호 입력:");
 		int updPlace = ObjController.scanInt();
 		String pname, ploca, ptype2;
-		ResultSet rs =null;
+		
+		Connection conn = OracleDB.getOracleConnection();
+		PreparedStatement pstmt=null;
+		ResultSet rs=null;
 		
 		String getdata = " SELECT PNO, PNAME, LOCA, pt.PTNO, PTYPE1, PTYPE2 " 
 				+ "FROM PLACE p " + "JOIN PLACETYPE pt"
@@ -320,8 +389,8 @@ public class PlaceSql {
 					System.out.println("선택한 핫플정보");
 					System.out.print("장소이름" + " | ");
 					System.out.print("장소지역" + " | ");
-					System.out.print("세부지역1" + " | ");
-					System.out.print("세부지역2" + "\n");
+					System.out.print("대분류" + " | ");
+					System.out.print("소분류" + "\n");
 					System.out.println("-----------------------------------------");
 					System.out.print(rs.getString("PNAME") + " | ");
 					System.out.print(rs.getString("LOCA") + " | ");
@@ -384,10 +453,50 @@ public class PlaceSql {
 
 	
 	//장소삭제
+	public void delPlace() {
+		System.out.print("삭제할 장소 번호 입력:");
+		int delPlace = ObjController.scanInt();
+		
+		Connection conn = OracleDB.getOracleConnection();
+		PreparedStatement pstmt =null;
+		ResultSet rs =null;
+		// 입력받은 번호의 ptno / ptype2가져오기
+//		String getno = "SELECT P.PNO, PTYPE2, PT.PTNO FROM PLACE P JOIN PLACETYPE PT ON P.PTNO = PT.PTNO WHERE PNO =?";
+		PreparedStatement pstmtg;
+		if (delPlace>=1) {
+				//삭제SQL
+				String sql = "UPDATE PLACE SET DELETE_YN='Y' WHERE PNO = ? AND DELETE_YN = 'N'";
+
+				// 번호가 db에 있는 지없는지 판별
+				checknum = new numCheck().pnumCheck(delPlace);
+
+				if (checknum == 1) {
+					try {
+
+						pstmt = conn.prepareStatement(sql);
+						pstmt.setInt(1, delPlace);
+						int result = pstmt.executeUpdate();
+
+						if (result == 1) {
+							System.out.println(delPlace + "번 장소 삭제완료");
+						} else {
+							System.out.println("이미삭제된 번호입니다.");
+						}
+
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+				}else {System.out.println("없는 번호입니다.");}
+			}else {System.out.println("※1이상의 수를 입력해주세요...※");}
+	}// delPlace()
+	
 	public void delPlace(String place) {
 		System.out.print("삭제할 장소 번호 입력:");
 		int delPlace = ObjController.scanInt();
-		ResultSet rs =null;
+		
+		Connection conn = OracleDB.getOracleConnection();
+		PreparedStatement pstmt=null;
+		ResultSet rs=null;
 		// 입력받은 번호의 ptno / ptype2가져오기
 		String getno = "SELECT P.PNO, PTYPE2, PT.PTNO FROM PLACE P JOIN PLACETYPE PT ON P.PTNO = PT.PTNO WHERE PNO =?";
 		PreparedStatement pstmtg;
@@ -452,18 +561,12 @@ public class PlaceSql {
 		}else{System.out.println("1이상의 자연수를 입력해주세요");}
 }// delPlace()
 			 
-		
-
-				
-	
-	
-		
-		
-	
 
 	// 세부지역 가져오기
 	public String gPtye2(String place) {
-
+		Connection conn = OracleDB.getOracleConnection();
+		PreparedStatement pstmt=null;
+		ResultSet rs=null;
 		String sql = "SELECT PTYPE2, PTYPE1 FROM PLACETYPE WHERE PTYPE1= ?";
 
 		try {

@@ -41,6 +41,7 @@ public class RsvManage {
 				} 
 				else if ("4".equals(chrsv)) {
 					System.out.println("===============예약취소===============");
+					new RsvSql().RsvView();
 					new RsvSql().delRsv();
 					continue;
 				}
