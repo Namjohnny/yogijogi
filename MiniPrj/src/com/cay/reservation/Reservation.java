@@ -69,16 +69,16 @@ public class Reservation {
 			System.out.println("로그인한 유저만 예약할 수 있습니다.");
 			return;
 		}
-		
-		System.out.println("==== 예약 페이지 ====");
-		System.out.print("예약 날짜 (yy-mm-dd) : ");		
-		String rsvDate = ObjController.scanStr();
-		
 		Connection conn = OracleDB.getOracleConnection();
 		
+		System.out.println("==== 예약 페이지 ====");
+		System.out.println("예약 원하는 가게 번호를 입력하세요");
+		int pNo = ObjController.scanInt();
+		System.out.print("예약 날짜 (yy-mm-dd) : ");
+		String rsvDate = ObjController.scanStr();
+
 		String sql = "INSERT INTO RESERVATION(RSV_NO, MEM_NO, P_NO, RSV_DATE, CANCEL)"
 				+ "VALUES(RESERVATION_NO_SEQ.NEXTVAL, ?, ?, to_date(?, 'yyyy/mm/dd'), 'N')";
-		
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		try {
@@ -86,10 +86,8 @@ public class Reservation {
 			//로그인 연결... 가져오기...? executQurery.. 
 			rs = pstmt.executeQuery();
 			//1, 2 > 로그인한 계정의 데이터와 핫플의 정보가 들어가게 수정...!!
-			int memNo = rs.getInt("MEM_NO");
-			int pNo = rs.getInt("PNO");
 
-			pstmt.setInt(1, memNo);
+			pstmt.setInt(1, User.LoginUserNo);
 			pstmt.setInt(2, pNo);
 			pstmt.setString(3, rsvDate);
 			
@@ -106,7 +104,8 @@ public class Reservation {
 			e.printStackTrace();
 		} finally {
 			OracleDB.close(conn);
-			OracleDB.close(pstmt);			
+			OracleDB.close(pstmt);	
+			OracleDB.close(rs);
 		}
 		
 	}
@@ -123,12 +122,14 @@ public class Reservation {
 //		String sql = "SELECT * FROM RESERVATION R, MEMBER M WHERE R.MEM_NO = M.NO AND RSV_NO = ? AND DELETE_YN = 'N'";
 		String sql = "SELECT * FROM RSV_VIEW WHERE RSV_NO = ?";
 		
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
 		try {
-			PreparedStatement pstmt = conn.prepareStatement(sql);
+			pstmt = conn.prepareStatement(sql);
 			
 			pstmt.setInt(1, no);
 			
-			ResultSet rs = pstmt.executeQuery();
+			rs = pstmt.executeQuery();
 			
 			if(rs.next()) {
 				int rsvNo = rs.getInt("RSV_NO");
@@ -150,6 +151,8 @@ public class Reservation {
 			e.printStackTrace();
 		} finally {
 			OracleDB.close(conn);
+			OracleDB.close(pstmt);
+			OracleDB.close(rs);
 		}
 
 		System.out.println("해당 예약을 변경하거나 취소하시겠습니까?");
@@ -162,9 +165,7 @@ public class Reservation {
 		switch(n) {
 			case 1 : modRsv(); break;
 			case 2 : delRsv(); break;
-			case 3 : //마이페이지로 돌아가려고 하는데 유저 객체 만들어서 이렇게 쓰면 되는 게 맞는지...??? 
-				//MyPage.showPage(user); break;
-			default : System.out.println("다시 선택하세요.");
+			case 3 : break;
 		}
 		
 	}
@@ -228,6 +229,8 @@ public class Reservation {
 			e.printStackTrace();
 		} finally {
 			OracleDB.close(conn);
+			OracleDB.close(pstmt);	
+			OracleDB.close(rs);
 		}
 
 		// 성공적으로 변경됐습니다. 출력
@@ -270,6 +273,10 @@ public class Reservation {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			OracleDB.close(conn);
+			OracleDB.close(pstmt);	
+			OracleDB.close(rs);
 		}
 	}
 }
