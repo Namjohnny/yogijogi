@@ -86,8 +86,8 @@ public class ReviewManager {
 	public void addReview() {
 		System.out.println("===잠시만 기다려주세요===\n");
 		Connection conn = OracleDB.getOracleConnection();
-		String sql = "INSERT INTO REVIEW(R_NO, MEM_NO, PNO, TITLE, SCORE, REVIEW, DELETE_YN) "
-				   + "VALUES(REVIEW_SEQ.NEXTVAL,?,?,?,?,?,?) ";		
+		String sql = "INSERT INTO REVIEW(R_NO, MEM_NO, PNO, TITLE, SCORE, REVIEW) "
+				   + "VALUES(REVIEW_SEQ.NEXTVAL,?,?,?,?,?) ";		
 		PreparedStatement pstmt = null;
 		int result = 0;
 		try {
@@ -110,7 +110,6 @@ public class ReviewManager {
 			pstmt.setString(3, title);
 			pstmt.setInt(4, score);
 			pstmt.setString(5, review);
-			pstmt.setString(6, "N");
 			
 			result = pstmt.executeUpdate();
 			if(result==1) System.out.println("리뷰등록 성공!!!");
@@ -127,9 +126,9 @@ public class ReviewManager {
 	public void modReview() {
 		System.out.println("===잠시만 기다려주세요===\n");
 		Connection conn = OracleDB.getOracleConnection();
-		String sql1 = "UPDATE PAYMENT SET TITLE = ? WHERE R_NO = ?";	
-		String sql2 = "UPDATE PAYMENT SET SCORE = ? WHERE R_NO = ?";
-		String sql3 = "UPDATE PAYMENT SET REVIEW = ? WHERE R_NO = ?";
+		String sql1 = "UPDATE REVIEW SET TITLE = ? WHERE R_NO = ?";	
+		String sql2 = "UPDATE REVIEW SET SCORE = ? WHERE R_NO = ?";
+		String sql3 = "UPDATE REVIEW SET REVIEW = ? WHERE R_NO = ?";
 		PreparedStatement pstmt = null;
 		int result = 0;
 		try {
@@ -138,7 +137,7 @@ public class ReviewManager {
 			int rno = ObjController.scanInt();
 			while(true) {
 				System.out.println("수정하실 사항을 선택해주세요");
-				System.out.println("1.제목 | 2.평점 | 3.리뷰");
+				System.out.println("1.제목 | 2.평점 | 3.리뷰내용");
 				int choice = ObjController.scanInt();
 				if(choice == 1) {
 					pstmt = conn.prepareStatement(sql1);
@@ -156,7 +155,7 @@ public class ReviewManager {
 					break;
 				} else if(choice == 3) {
 					pstmt = conn.prepareStatement(sql3);
-					System.out.print("리뷰>> ");
+					System.out.print("리뷰내용>> ");
 					String review = ObjController.scanStr();
 					pstmt.setString(1, review);
 					pstmt.setInt(2, rno);
