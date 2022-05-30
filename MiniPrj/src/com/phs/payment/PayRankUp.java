@@ -1,8 +1,10 @@
 package com.phs.payment;
 
+import com.yogijogi.member.User;
+
 public class PayRankUp {
 
-	public void vipRankUp() {
+	public void vipRankUp(User user) {
 		boolean isNotValue = false;
 		while(!isNotValue) {
 				System.out.println("VIP 등급");
@@ -12,7 +14,7 @@ public class PayRankUp {
 				System.out.println("등급을 up 하시겠습니까? (Y/N)");
 				String userInput = com.yogijogi.obj.ObjController.scanStr();
 			if(userInput.equalsIgnoreCase("Y")) {
-				Pay.payNow01();
+				Pay.payNow01(user);
 				isNotValue = true;
 				// 결제 안내페이지로 이동
 			}else if(userInput.equalsIgnoreCase("N")) {
