@@ -14,7 +14,7 @@ import com.yogijogi.obj.ObjController;
 
 public class Pay {
 
-	public static void payNow01() {
+	public static void payNow01(User user) {
 		System.out.println("============ VIP 등급 결제 페이지 ============");
 		System.out.println("결제 하실 금액은 30,000원 입니다.");
 		
@@ -66,6 +66,7 @@ public class Pay {
 			pstmt3.setInt(1, com.yogijogi.member.User.LoginUserNo);
 			int result = pstmt3.executeUpdate();
 			if(result == 1) {
+				user.setRank("V");
 				System.out.println("VIP 등급이 설정되었습니다.");
 			}else {
 				return;
@@ -153,19 +154,19 @@ public class Pay {
 		System.out.println("결제 내역 확인");
 		Connection conn = com.yogijogi.obj.OracleDB.getOracleConnection();
 		String sql = "SELECT "
-				+ "M.NICK 닉네임"
-				+ ", P.PAY_NO"
-				+ ", P.PAYCON"
-				+ ", P.AMOUNT"
-				+ ", PM.PNAME"
-				+ ", P.PAY_YN"
-				+ ", P.PAY_DATE "
-				+ "FROM MEMBER M "
-				+ "JOIN PAYMENT P "
-				+ "ON M.MEM_NO = P.MEM_NO "
-				+ "JOIN PAYMETHOD PM "
-				+ "ON P.PAY_NO = PM.PM_NO "
-				+ "WHERE P.MEM_NO = ? ";
+				+ "		 M.NICK"
+				+ "    , P.PAY_NO"
+				+ "    , P.PAYCON"
+				+ "    , P.AMOUNT"
+				+ "    , PM.PNAME"
+				+ "    , P.PAY_YN"
+				+ "    , P.PAY_DATE"
+				+ " FROM MEMBER M"
+				+ " JOIN PAYMENT P"
+				+ " ON M.MEM_NO = P.MEM_NO"
+				+ " JOIN PAYMETHOD PM"
+				+ " ON P.PAY_NO = PM.PM_NO"
+				+ " WHERE P.MEM_NO = ?";
 		PreparedStatement pstmt = null;
 		try {
 			pstmt = conn.prepareStatement(sql);
@@ -189,7 +190,7 @@ public class Pay {
 			
 			while(rs.next()) {
 				String nick = rs.getString("NICK");
-				String payNo = rs.getString("PAY_NO");
+				int payNo = rs.getInt("PAY_NO");
 				String payCon = rs.getString("PAYCON");
 				int amt = rs.getInt("AMOUNT");
 				String pName = rs.getString("PNAME");
