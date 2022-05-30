@@ -1,13 +1,13 @@
-package serch;
+package search;
 
 import com.yogijogi.obj.ObjController;
 
-public class SerchMain {
+public class SearchRun {
 
-	public static void main(String[] args) {
-
+	public void searchRun() {
+		
 		System.out.println("=====검색=====");
-		new Serch().showList();
+		new Search().showList();
 		
 		System.out.println("1. 한식 정보상세 보기");
 		System.out.println("2. 일식 정보상세 보기");
@@ -26,20 +26,20 @@ public class SerchMain {
 		int n = ObjController.scanInt();
 		
 		switch(n) {
-		case 1 : new Pt1().serch1(); break;
-		case 2 : new Pt1().serch2(); break;
-		case 3 : new Pt1().serch3(); break;
-		case 4 : new Pt1().serch4(); break;
-		case 5 : new Pt1().serch5(); break;
-		case 6 : new Pt1().serch6(); break;
-		case 7 : new Pt1().serch7(); break;
-		case 8 : new Pt1().serch8(); break;
-		case 9 : new Pt1().serch9(); break;
-		case 10 : new Pt1().serch10(); break;
-		case 11 : new Pt1().serch11(); break;
-		case 12 : new Pt1().serch12(); break;
+		case 1 : new Pt1().search1(); break;
+		case 2 : new Pt1().search2(); break;
+		case 3 : new Pt1().search3(); break;
+		case 4 : new Pt1().search4(); break;
+		case 5 : new Pt1().search5(); break;
+		case 6 : new Pt1().search6(); break;
+		case 7 : new Pt1().search7(); break;
+		case 8 : new Pt1().search8(); break;
+		case 9 : new Pt1().search9(); break;
+		case 10 : new Pt1().search10(); break;
+		case 11 : new Pt1().search11(); break;
+		case 12 : new Pt1().search12(); break;
 		default : System.out.println("다시 선택 하세요");
 		}
-	
 	}
+	
 }

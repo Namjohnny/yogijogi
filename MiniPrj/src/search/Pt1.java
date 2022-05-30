@@ -1,4 +1,4 @@
-package serch;
+package search;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,7 +10,7 @@ import com.yogijogi.obj.OracleDB;
 
 	public class Pt1 {
 
-		public static void serch1() {
+		public static void search1() {
 		
 		System.out.println("=====한식 정보 상세 보기=====");
 		
@@ -49,7 +49,7 @@ import com.yogijogi.obj.OracleDB;
 		
 	}
 	
-		public static void serch2() {
+		public static void search2() {
 		
 		System.out.println("=====일식 정보 상세 보기=====");
 		
@@ -88,7 +88,7 @@ import com.yogijogi.obj.OracleDB;
 		
 	}
 
-	public static void serch3() {
+	public static void search3() {
 	
 	 System.out.println("=====중식 정보 상세 보기=====");
 	
@@ -127,7 +127,7 @@ import com.yogijogi.obj.OracleDB;
 	
 }
 
-	public static void serch4() {
+	public static void search4() {
 	
 	System.out.println("=====양식 정보 상세 보기=====");
 	
@@ -166,7 +166,7 @@ import com.yogijogi.obj.OracleDB;
 	
 }
 
-	public static void serch5() {
+	public static void search5() {
 	
 	System.out.println("=====기타 정보 상세 보기=====");
 	
@@ -205,7 +205,7 @@ import com.yogijogi.obj.OracleDB;
 	
 }
 
-	public static void serch6() {
+	public static void search6() {
 	
 	System.out.println("=====박물관 정보 상세 보기=====");
 	
@@ -244,7 +244,7 @@ import com.yogijogi.obj.OracleDB;
 	
 }
 
-	public static void serch7() {
+	public static void search7() {
 	
 	System.out.println("=====미술관 정보 상세 보기=====");
 	
@@ -283,7 +283,7 @@ import com.yogijogi.obj.OracleDB;
 	
 }
 	
-	public static void serch8() {
+	public static void search8() {
 		
 		System.out.println("=====영화관 정보 상세 보기=====");
 		
@@ -322,7 +322,7 @@ import com.yogijogi.obj.OracleDB;
 		
 	}
 	
-	public static void serch9() {
+	public static void search9() {
 		
 		System.out.println("=====극장 정보 상세 보기=====");
 		
@@ -361,7 +361,7 @@ import com.yogijogi.obj.OracleDB;
 		
 	}
 	
-	public static void serch10() {
+	public static void search10() {
 		
 		System.out.println("=====기타 정보 상세 보기=====");
 		
@@ -400,7 +400,7 @@ import com.yogijogi.obj.OracleDB;
 		
 	}
 	
-	public static void serch11() {
+	public static void search11() {
 		
 		System.out.println("=====주점 정보 상세 보기=====");
 		
@@ -439,7 +439,7 @@ import com.yogijogi.obj.OracleDB;
 		
 	}
 	
-	public static void serch12() {
+	public static void search12() {
 		
 		System.out.println("=====클럽 정보 상세 보기=====");
 		
