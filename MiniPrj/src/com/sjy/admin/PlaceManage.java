@@ -44,9 +44,9 @@ public class PlaceManage {
 				modPlace(modch);
 			} else if (ch == 4) {
 				// 핫플삭제
-				System.out.println("1.음식점 2.문화체험 3.유흥");
-				int delch = ObjController.scanInt();
-				delPace(delch);
+				//System.out.println("1.음식점 2.문화체험 3.유흥");
+				//int delch = ObjController.scanInt();
+				delPlace();
 			}
 
 			else {
@@ -104,31 +104,40 @@ public class PlaceManage {
 			new PlaceSql().addP(pleasure);
 		}else {System.out.println("번호를 다시 입력해주세요"); return;}
 	}
-
+	
+	//수정
 	public void modPlace(int upch) {
 		if (upch == 1) {
+			//search(upch);
+			new PlaceSql().showList2(food);
 			System.out.println("---------------음식수정---------------");
 			new PlaceSql().modPlace(food);
 		} else if (upch == 2) {
+			//search(upch);
+			new PlaceSql().showList2(culture);
 			System.out.println("---------------문화수정---------------");
 			new PlaceSql().modPlace(culture);
 		} else if (upch == 3) {
+			//search(upch);
+			new PlaceSql().showList2(pleasure);
 			System.out.println("---------------유흥수정---------------");
 			new PlaceSql().modPlace(pleasure);
 		}else {System.out.println("번호를 다시 입력해주세요"); return;}
 	}
 
-	public void delPace(int delch) {
-		if (delch == 1) {
-			System.out.println("---------------음식삭제---------------");
-			new PlaceSql().delPlace(food);
-		} else if (delch == 2) {
-			System.out.println("---------------문화삭제---------------");
-			new PlaceSql().delPlace(culture);
-		} else if (delch == 3) {
-			System.out.println("---------------유흥삭제---------------");
-			new PlaceSql().delPlace(pleasure);
-		}else {System.out.println("번호를 다시 입력해주세요"); return;}
+	public void delPlace() {
+		view();
+		new PlaceSql().delPlace();
+//		if (delch == 1) {
+//			System.out.println("---------------음식삭제---------------");
+//			new PlaceSql().delPlace(food);
+//		} else if (delch == 2) {
+//			System.out.println("---------------문화삭제---------------");
+//			new PlaceSql().delPlace(culture);
+//		} else if (delch == 3) {
+//			System.out.println("---------------유흥삭제---------------");
+//			new PlaceSql().delPlace(pleasure);
+//		}else {System.out.println("번호를 다시 입력해주세요"); return;}
 	}
 
 	public void view() {
@@ -157,6 +166,8 @@ public class PlaceManage {
 			System.out.print(ptType1 + " | ");
 			System.out.print(ptType2 + " | ");
 			System.out.println();
+			
+			
 		}
 		System.out.println();
 	}// view()

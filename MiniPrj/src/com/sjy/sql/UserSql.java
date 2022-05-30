@@ -11,9 +11,7 @@ import com.yogijogi.obj.OracleDB;
 
 public class UserSql {
 	
-	Connection conn = OracleDB.getOracleConnection();
-	PreparedStatement pstmt=null;
-	ResultSet rs = null;
+	
 	
 //	public static void main(String[] args) {
 //		numCh
@@ -22,7 +20,11 @@ public class UserSql {
 	//회원번호 확인 체크
 	public int numCheck(int num) {
 		String chSelect = "SELECT MEM_NO FROM MEMBER WHERE MEM_NO = ?";
+		Connection conn = OracleDB.getOracleConnection();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
 		try {
+		
 			pstmt = conn.prepareStatement(chSelect);
 			pstmt.setInt(1, num);
 
@@ -32,7 +34,7 @@ public class UserSql {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}
+		}finally {OracleDB.close(conn);OracleDB.close(pstmt);OracleDB.close(rs);}
 
 		return -1;// 번호없음
 	}//numCheck()
@@ -40,6 +42,9 @@ public class UserSql {
 	//아이디 중복 체크
 	public int idCheck(String id) {
 		String chSelect = "SELECT MEM_NO FROM MEMBER WHERE ID = ?";
+		Connection conn = OracleDB.getOracleConnection();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
 		try {
 			pstmt = conn.prepareStatement(chSelect);
 			pstmt.setString(1, id);
@@ -50,7 +55,7 @@ public class UserSql {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}
+		}finally {OracleDB.close(conn);OracleDB.close(pstmt);OracleDB.close(rs);}
 
 		return -1;// 번호없음
 	}//idCheck()
@@ -58,7 +63,11 @@ public class UserSql {
 
 	public void searchAll() {
 		//모든 회원 보여주기
-		String sql = "SELECT * FROM MEMBER";
+		Connection conn = OracleDB.getOracleConnection();
+		PreparedStatement pstmt=null;
+		ResultSet rs=null;
+		String sql = "SELECT * FROM MEMBER WHERE DROP_YN='N'";
+		
 		try {
 			pstmt = conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();
@@ -76,8 +85,10 @@ public class UserSql {
 		
 		
 		if(numCh == 1){
-			
-			String sql = "SELECT * FROM MEMBER WHERE MEM_NO  =?";
+			Connection conn = OracleDB.getOracleConnection();
+			PreparedStatement pstmt =null;
+			ResultSet rs = null;
+			String sql = "SELECT * FROM MEMBER WHERE MEM_NO  =? and DROP_YN='N' ";
 			try {
 				pstmt = conn.prepareStatement(sql);
 				pstmt.setInt(1, num);
@@ -93,11 +104,6 @@ public class UserSql {
 	}
 	
 	public void modUser() {
-		//1.아이디 2.비밀번호 3.정보
-		//System.out.println("수정내용: 1.아이디 2.비밀번호 3.정보");
-		//System.out.print("번호:");
-		//String ch =ObjController.scanStr();
-
 		System.out.print("수정 회원번호:");
 		int mNum = ObjController.scanInt();
 		// 번호에맞는 회원정보 불러오기
@@ -105,13 +111,13 @@ public class UserSql {
 		
 		// 수정할 정보 입력
 		// 입력받은 데이터 update
-		boolean resultUp = modUserIf();
+		boolean resultUp = modUserIf(mNum);
 		if (resultUp) {
 			System.out.println("수정완료");
 		}else {System.out.println("수정실패");}
 	}
 	
-	public boolean modUserIf() {
+	public boolean modUserIf(int mNum) {
 		// 수정할 정보 입력
 		// 아이디 패스워드 이름 닉네임 생일 성별
 		System.out.println("=====정보수정=====");
@@ -156,7 +162,10 @@ public class UserSql {
 			System.out.println("M 또는 F만 입력 가능합니다!");
 			return false;
 		}
-		String sql = "UPDATE MEMBER SET ID=?, PWD=?, UNAME=?, NICK=?, BIRTH_DATE=?, GENDER=?";
+		Connection conn =OracleDB.getOracleConnection();
+		PreparedStatement pstmt = null;
+		
+		String sql = "UPDATE MEMBER SET ID=?, PWD=?, UNAME=?, NICK=?, BIRTH_DATE=?, GENDER=? WHERE MEM_NO=?";
 		
 		
 		try {
@@ -167,6 +176,7 @@ public class UserSql {
 			pstmt.setString(4,modNick );
 			pstmt.setString(5,modBirth );
 			pstmt.setString(6, modGen);
+			pstmt.setInt(7, mNum);
 			int result = pstmt.executeUpdate();
 			
 			if (result == 1) {
@@ -175,7 +185,7 @@ public class UserSql {
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}
+		}finally {OracleDB.close(conn);OracleDB.close(pstmt);}
 		return false;
 		
 		
@@ -197,7 +207,7 @@ public class UserSql {
 			PreparedStatement pstmt = null;
 			ResultSet rs = null;
 			try {
-				pstmt = conn.prepareStatement("UPDATE MEMBER SET DROP_YN = 'Y' WHERE MEM_NO = ?");
+				pstmt = conn.prepareStatement("UPDATE MEMBER SET DROP_YN = 'Y' WHERE MEM_NO = ? AND DROP_YN='N'");
 				pstmt.setInt(1, memNo);
 				rs = pstmt.executeQuery();
 				

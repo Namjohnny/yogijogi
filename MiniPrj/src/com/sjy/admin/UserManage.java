@@ -7,7 +7,7 @@ import com.yogijogi.obj.OracleDB;
 
 public class UserManage {
 	int userno;
-
+	UserSql userSql = new UserSql();
 	public void showList() {
 		System.out.println("---------------사용자---------------");
 		System.out.println("사용자관리 화면");
@@ -29,7 +29,7 @@ public class UserManage {
 
 				System.out.println("---------------회원조회---------------");
 				// 회원정보 보여주는 메서드 (전체 or 특정회원 선택?)
-				new UserSql().searchAll();
+				userSql.searchAll();
 				continue;
 			} else if (userch == 2) {
 				System.out.println("---------------회원가입---------------");
@@ -40,14 +40,19 @@ public class UserManage {
 			} else if (userch == 3) {
 
 				System.out.println("---------------회원정보수정---------------");
-				new UserSql().modUser();
+				userSql.searchAll();
+				System.out.println();
+				System.out.println("-------수정내용-------");
+				userSql.modUser();
 				continue;
 			} else if (userch == 4) {
 
 				System.out.println("---------------회원탈퇴---------------");
+				userSql.searchAll();
 				System.out.print("탈퇴 회원번호:");
+				System.out.println();
 				int memNo = ObjController.scanInt();
-				new UserSql().delUser(memNo);
+				userSql.delUser(memNo);
 				continue;
 			}
 			else {
