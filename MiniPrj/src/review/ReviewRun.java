@@ -2,10 +2,10 @@ package review;
 
 import com.yogijogi.obj.ObjController;
 
-public class ReviewMain {
+public class ReviewRun {
 
-	public static void main(String[] args) {
-
+	public void ReviewRun() {
+		
 		System.out.println("=====선택=====");
 		System.out.println("1. 리뷰보기");
 		System.out.println("2. 리뷰작성");
@@ -19,5 +19,5 @@ public class ReviewMain {
 		}
 		
 	}
-
+	
 }

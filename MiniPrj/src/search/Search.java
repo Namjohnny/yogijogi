@@ -1,17 +1,16 @@
-package serch;
+package search;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.yogijogi.obj.ObjController;
 import com.yogijogi.obj.OracleDB;
 
-public class Serch {
-	
+public class Search {
+
 	public static void showList() {
-	
+		
 		System.out.println("=====목록=====");
 		
 		Connection conn = OracleDB.getOracleConnection();

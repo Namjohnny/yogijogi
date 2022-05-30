@@ -20,7 +20,7 @@ public static void showReviewList() {
 		
 		Connection conn = OracleDB.getOracleConnection();
 		
-		String sql ="SELECT * FROM REVIEW WHERE DELETE_YN = 'N' ORDER BY R_NO DESC";
+		String sql ="SELECT * FROM REVIEW WHERE DELETE_YN = 'N' ORDER BY R_NO ASC";
 		
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -40,7 +40,7 @@ public static void showReviewList() {
 			System.out.print("평점");
 			System.out.print("|");
 			System.out.print("리뷰작성일");
-			System.out.print("\n============");
+			System.out.println("\n============");
 			
 			while(rs.next()) {
 				int rno = rs.getInt("R_NO");
@@ -61,6 +61,7 @@ public static void showReviewList() {
 				System.out.print(score);
 				System.out.print("|");
 				System.out.print(rdate);
+				System.out.println();
 			}
 			
 		} catch (SQLException e) {
@@ -78,12 +79,12 @@ public static void showReviewList() {
 public static void showReviewDetail() {
 		
 		System.out.println("=====리뷰 상세 보기=====");
-		System.out.print("조회할 게시글 번호 입력 : ");
+		System.out.println("조회할 게시글 번호 입력 : ");
 		int no = ObjController.scanInt();
 		
 		Connection conn = OracleDB.getOracleConnection();
 		
-		String sql = "SEELECT * FROM REVIEW WHERE R_NO = ? AND DELETE_YN = 'N'";
+		String sql = "SELECT * FROM REVIEW WHERE R_NO = ? AND DELETE_YN = 'N'";
 		
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -91,16 +92,16 @@ public static void showReviewDetail() {
 		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, no);
-			rs = pstmt.executeQuery(sql);
+			rs = pstmt.executeQuery();
 			
 			if(rs.next()) {
 				String title = rs.getString("TITLE");
 				String score = rs.getString("SCORE");
-				String content = rs.getString("CONTENT");
+				String review = rs.getString("REVIEW");
 				
 				System.out.println(title);
 				System.out.println(score);
-				System.out.println(content);
+				System.out.println(review);
 			}
 			
 		} catch (SQLException e) {
@@ -133,8 +134,8 @@ public static void showReviewDetail() {
 		
 		Connection conn = OracleDB.getOracleConnection();
 		
-		String sql = "INSERT INTO REVIEW(R_NO, MEM_NO, PNO, TITLE, SCORE, REVIEW, DELETE_YN)" 
-		+ "VALUES(REVIEW_NO_SEQ.NEXTVAL, ?, ?, ?, ?, SYSDATE, 'N')";
+		String sql = "INSERT INTO REVIEW(R_NO, MEM_NO, PNO, TITLE, SCORE, REVIEW, WDATE, DELETE_YN)" 
+		+ "VALUES(REVIEW_SEQ.NEXTVAL, ?, ?, ?, ?, ?, SYSDATE, 'N')";
 		
 		PreparedStatement pstmt = null;
 		try {
