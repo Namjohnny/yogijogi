@@ -13,7 +13,7 @@ import com.yogijogi.obj.OracleDB;
 public class PayManager {
 	Scanner sc = new Scanner(System.in);
 	
-	public PayManager(User user) {
+	public PayManager() {
 		showList();
 	}
 	
