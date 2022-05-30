@@ -128,12 +128,23 @@ public class Pay {
 			com.yogijogi.obj.OracleDB.close(pstmt2);
 		}
 		
-		String sql3 = "INSERT INTO RESERVATION(PAY_NO) "
-				+ "VALUES (PAYMENT_PNO_SEQ.CURRVAL) ";
+		String sql3 = "UPDATE RESERVATION SET PAY_NO = PAYMENT_PNO_SEQ.CURRVAL WHERE RSV_NO = ?";
 		
 		PreparedStatement pstmt3 = null;
 		try {
+			PreparedStatement pstmt4 = null;
+
+            ResultSet rs = null;
+
+
+            String sql4 = "SELECT * FROM RSV_VIEW";
+            pstmt4 = conn.prepareStatement(sql4);
+            rs = pstmt4.executeQuery();
+            rs.next();
+            int rsvNo = rs.getInt("RSV_NO");
+                
 			pstmt3 = conn.prepareStatement(sql3);
+			pstmt3.setInt(1, rsvNo);
 			int result = pstmt3.executeUpdate();
 			if(result == 1) {
 				System.out.println("메인 화면으로 돌아갑니다.");

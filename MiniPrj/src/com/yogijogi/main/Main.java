@@ -85,6 +85,7 @@ public class Main {
 				case 4 :
 					//리뷰 게시판
 					new ReviewRun().ReviewRun();
+					break;
 					// ReviewMain을 main문이 아니라 메소드로 수정 후 해당 메소드 이곳에 넣기
 				case 5 :
 					//고객 센터
